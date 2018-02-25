@@ -1,6 +1,6 @@
 import java.util.Random;
 
-public class ArenaArray {
+public class ArenaArray{
 
 	//fields
 	public int[][] arenaArray; //make this public for Player class? 
@@ -14,19 +14,18 @@ public class ArenaArray {
 	private static final int CONSUMABLE = 2;
 	private static final int WALL = 3;
 	
-	//constructors
-	public ArenaArray(int[][] arenaArray) {
-		this.arenaArray = arenaArray;
-	}
+
+
+	
 	
 	//Methods
 	
-	public int[][] createArenaArray() {
+	public static int[][] createArenaArray() {
 		Random RNG = new Random();
-		floorWidth = getFloorDimensions(floor)[0][0];
-		floorHeight = getFloorDimensions(floor)[0][1];
+		int floorHeight = getFloorDimensions(floor)[0][0];
+		int floorWidth = getFloorDimensions(floor)[0][1];
 		
-		int[][] arena = new int[floorWidth][floorHeight]; 
+		int[][] arena = new int[floorHeight][floorWidth]; 
 		
 		for(int i = 0; i < floorHeight; i++) {
 			for(int j = 0; j < floorWidth; j++) {
@@ -41,7 +40,7 @@ public class ArenaArray {
 		}
 		
 		//create walls
-		createWalls(arena, floorWidth, floorHeight);
+		createWalls(arena, floorHeight, floorWidth);
 		
 		floor += 1;
 		return arena;
@@ -49,26 +48,30 @@ public class ArenaArray {
 	}
 	
 	//create walls for array
-	public static void createWalls(int[][] arena, int floorWidth, int floorHeight) {
+	public static void createWalls(int[][] arena, int floorHeight, int floorWidth) {
 		//Horizontal walls
-		for(int row = 0; row < floorHeight; row = floorHeight - 1) {
-			for(int col = 0; col < floorWidth; col++) {
-				arena[row][col] = WALL;
-			}
+		for(int col = 0; col < floorWidth; col++) {
+			arena[0][col] = WALL;
 		}
+		for(int col = 0; col< floorWidth; col++) {
+			arena[floorHeight - 1][col] = WALL;
+		}
+			
 		//Vertical walls
-		for(int col = 0; col < floorWidth; col = floorWidth - 1) {
-			for(int row = 0; row < floorHeight; row++) {
-				arena[row][col] = WALL;
-			}
+		for(int row = 0; row < floorHeight; row++) {
+			arena[row][0] = WALL;
 		}
+		for(int row = 0; row < floorHeight; row++) {
+			arena[row][floorWidth - 1] = WALL;
+		}
+		
 	}
 	
 	//each floor's dimensions
 	public static int[][] getFloorDimensions(int floor){
-		int[][] dimensions = new int[1][2];
+		int[][] dimensions = new int[1][2]; //[height][width]
 		switch(floor) {
-		case 1: dimensions[0][0] = 300; dimensions[0][1] = 200; break; //replace these magic number later on
+		case 1: dimensions[0][0] = 100; dimensions[0][1] = 150; break; //replace these magic number later on
 		case 2: 
 		case 3:
 		case 4:
@@ -106,15 +109,17 @@ public class ArenaArray {
 	
 	
 	
-	
+	public static void main(String[] args) {
+		int[][] arena = createArenaArray();
+		for(int i = 0; i < arena.length; i++) 
+			for(int j = 0; j < arena[i].length; j++) 
+				System.out.print(arena[i][j]);
+	}
 
 		
 	
 	/**Testing array
-	   int[][] arena = createArray();
-		for(int i = 0; i < arena.length; i++) 
-			for(int j = 0; j < arena[i].length; j++) 
-				System.out.print(arena[i][j]);
+	   
 	 */
 }
 

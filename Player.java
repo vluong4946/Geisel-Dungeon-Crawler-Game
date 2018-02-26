@@ -3,6 +3,7 @@ import java.util.Arrays;
 public class Player {
 	//fields for a player instance
 	private int health;
+	private int[][] inventory;
 	//inventory of objects
 	
 	//constructors

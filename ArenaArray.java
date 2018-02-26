@@ -2,24 +2,26 @@ import java.util.Random;
 
 public class ArenaArray{
 
+	//CHANGE ALL TO PRIVATE FIELDS ONCE PLAYER CLASS IS MADE??? yea probably lol
+	
 	//fields
 	public int[][] arenaArray; //make this public for Player class? 
 	
-	private static int floor = 1; 
-	private int floorWidth;
-	private int floorHeight;
+	private static int floor = 1; //Will increase
+	private static int floorWidth = 150; //By default in floor 1
+	private static int floorHeight = 100; //By default in floor 1
 	
-	private static final int EMPTY_SPACE = 0;
-	private static final int ENEMY = 1;
-	private static final int CONSUMABLE = 2;
-	private static final int WALL = 3;
+	//make these public?
+	public static final int EMPTY_SPACE = 0;
+	public static final int ENEMY = 1;
+	public static final int ITEM = 2;
+	public static final int WALL = 3;
+	public static final int PLAYER = 999;
 	
-
-
 	
+	public static int[] playerPosition = new int[2];
 	
 	//Methods
-	
 	public static int[][] createArenaArray() {
 		Random RNG = new Random();
 		int floorHeight = getFloorDimensions(floor)[0][0];
@@ -30,9 +32,9 @@ public class ArenaArray{
 		for(int i = 0; i < floorHeight; i++) {
 			for(int j = 0; j < floorWidth; j++) {
 				//10% chance of a tile being an encounter
-				switch(RNG.nextInt(10)) {
+				switch(RNG.nextInt(100)) {
 				case 1: arena[i][j] = ENEMY; break; 
-				case 2: arena[i][j] = CONSUMABLE; break;
+				case 2: arena[i][j] = ITEM; break;
 				default: arena[i][j] = EMPTY_SPACE; break;
 				}
 					
@@ -41,6 +43,12 @@ public class ArenaArray{
 		
 		//create walls
 		createWalls(arena, floorHeight, floorWidth);
+		
+		
+		
+		
+		playerPosition[0] = 74;
+		playerPosition[1] = 49;
 		
 		floor += 1;
 		return arena;
@@ -71,7 +79,7 @@ public class ArenaArray{
 	public static int[][] getFloorDimensions(int floor){
 		int[][] dimensions = new int[1][2]; //[height][width]
 		switch(floor) {
-		case 1: dimensions[0][0] = 100; dimensions[0][1] = 150; break; //replace these magic number later on
+		case 1: dimensions[0][0] = 150; dimensions[0][1] = 100; break; //replace these magic number later on
 		case 2: 
 		case 3:
 		case 4:
@@ -104,6 +112,46 @@ public class ArenaArray{
 			}
 	 */
 	
+	//getter methods for adjacent directions
+	public static int getAbove(int[][] arena) {
+		
+		switch(arena[playerPosition[0]]  [playerPosition[1] + 1]) {
+		case 1: return ENEMY; 
+		case 2: return ITEM;
+		case 3: return WALL;
+		default: return EMPTY_SPACE;
+		}
+	}
+	public static int getBelow(int[][] arena) {
+		switch(arena[playerPosition[0]]  [playerPosition[1] - 1]) {
+		case 1: return ENEMY;
+		case 2: return ITEM;
+		case 3: return WALL;
+		default: return EMPTY_SPACE;
+		}
+	}
+	public static int getLeft() {
+		return -1; 
+	}
+	public static int getRight() {
+		return -1; 
+	}
+	
+	//getter method for player position (x, y)
+	/*
+	 * public int[][] getPlayerPosition(int[][] arrayArena){
+		for(int i = 0; i < arrayArena.length; i++) {
+			for(int j = 0; j < arrayArena[i].length; j++) {
+				if(arrayArena[i][j] == PLAYER) {
+					playerPosition[0][0] = j;
+					playerPosition[0][1] = i;
+					break;
+				}
+			}
+		}
+		return playerPosition;
+	}
+	 */
 	
 	
 	
@@ -122,5 +170,3 @@ public class ArenaArray{
 	   
 	 */
 }
-
-

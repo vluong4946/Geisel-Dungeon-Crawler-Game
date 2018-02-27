@@ -1,5 +1,16 @@
 import java.util.Arrays;
 import java.util.Random;
+
+/**
+ * Class player contains the constructors for creating new instances of
+ * Player object, and the classes and their subclasses for the other
+ * objects in the game, such as items and enemies. 
+ * 
+ * NOTE:
+ * This class is not yet fully implemented into the project yet. 
+ * Its features are still not present in the game. 
+ *
+ */
 public class Player extends Dungeon{
 	//fields for a player instance
 	private int health =100;
@@ -17,12 +28,14 @@ public class Player extends Dungeon{
 		
 	}
 	
-	//methods
+	//Creates new instance of Player
 	public void createPlayer() {
 		Player player = new Player();
 	}
 	
-	
+	/**
+	 * Class for Item objects and its subclasses. 
+	 */
 	class Item{
 		Random rng = new Random();
 		int item_value;
@@ -33,7 +46,7 @@ public class Player extends Dungeon{
 					Potion potion = new Potion();
 					break;
 					case 2:
-					Weapon weapon = new Weapon();
+					//Weapon weapon = new Weapon();
 					break;
 			}
 		}

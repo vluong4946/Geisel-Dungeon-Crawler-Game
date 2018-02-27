@@ -1,4 +1,12 @@
 import java.util.Random;
+/**
+ * This class contains a method for creating the array that operates in relation 
+ * to the playing field. The array determines the location of nodes, such as
+ * enemies and items. This class contains getter methods for retrieving data on
+ * the adjacent tiles to the player. 
+ * This class contains public methods and public variables for usage in Dungeon.java. 
+ *
+ */
 
 public class ArenaArray{
 
@@ -10,8 +18,7 @@ public class ArenaArray{
 	private static int floor = 1; //Will increase
 	private static int floorWidth = 150; //By default in floor 1
 	private static int floorHeight = 100; //By default in floor 1
-	
-	//make these public?
+	//make these public for usage in Dungeon.java?
 	public static final int EMPTY_SPACE = 0;
 	public static final int ENEMY = 1;
 	public static final int ITEM = 2;
@@ -21,7 +28,8 @@ public class ArenaArray{
 	
 	public static int[] playerPosition = new int[2];
 	
-	//Methods
+	/*Create an array representation of the playing field. Used to store
+	 * location of nodes, like items and enemies.*/
 	public static int[][] createArenaArray() {
 		Random RNG = new Random();
 		int floorHeight = getFloorDimensions(floor)[0][0];
@@ -40,14 +48,10 @@ public class ArenaArray{
 					
 			}
 		}
-		
-		//create walls
+		//create walls for arena
 		createWalls(arena, floorHeight, floorWidth);
 		
-		
-		
-		
-		playerPosition[0] = 74;
+		playerPosition[0] = 74; //magic numbers, BAD XD 
 		playerPosition[1] = 49;
 		
 		floor += 1;
@@ -55,7 +59,7 @@ public class ArenaArray{
 		
 	}
 	
-	//create walls for array
+	/*Create arena walls*/
 	public static void createWalls(int[][] arena, int floorHeight, int floorWidth) {
 		//Horizontal walls
 		for(int col = 0; col < floorWidth; col++) {
@@ -75,7 +79,7 @@ public class ArenaArray{
 		
 	}
 	
-	//each floor's dimensions
+	/*Used for storing and retrieving each floor's dimensions*/
 	public static int[][] getFloorDimensions(int floor){
 		int[][] dimensions = new int[1][2]; //[height][width]
 		switch(floor) {
@@ -112,11 +116,11 @@ public class ArenaArray{
 			}
 	 */
 	
-	//getter methods for adjacent directions
+	/*Getter methods for adjacent nodes to player*/
 	public static int getAbove(int[][] arena) {
 		
 		switch(arena[playerPosition[0]]  [playerPosition[1] + 1]) {
-		case 1: return ENEMY; 
+		case 1: return ENEMY; //replace magic numbers haha yes :) ^o^ .///.  >_<
 		case 2: return ITEM;
 		case 3: return WALL;
 		default: return EMPTY_SPACE;
@@ -156,17 +160,11 @@ public class ArenaArray{
 	
 	
 	
-	
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		int[][] arena = createArenaArray();
 		for(int i = 0; i < arena.length; i++) 
 			for(int j = 0; j < arena[i].length; j++) 
 				System.out.print(arena[i][j]);
 	}
-
-		
-	
-	/**Testing array
-	   
 	 */
 }

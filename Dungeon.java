@@ -92,7 +92,7 @@ public class Dungeon extends Application{
 		primaryStage.show();
 		
 	    scene = new Scene(pane,2000,1000);
-	    scene1 = new Scene(pane1, 500,800);
+	    scene1 = new Scene(pane1,500,800);
 
 	    primaryStage.setScene(scene);
 
@@ -171,8 +171,7 @@ public class Dungeon extends Application{
 		 * yet. ATM it's just some print statements saying you encountered something. 
 		 * 
 		 * NOTE: not fully functional. Logic errors present - sometimes encountering
-		 * something will not prompt approprite events. Also we can walk through
-		 * walls. */		
+		 * something will not prompt appropriate events.  */		
 		sc.setOnKeyPressed(ke -> {
 			switch (ke.getCode()) {
 			case W:
@@ -188,7 +187,7 @@ public class Dungeon extends Application{
 						System.out.println("You enter battle");
 					if(ArenaArray.getAbove(arena) == ArenaArray.ITEM)
 						System.out.println("You pick up an item");
-						Player Item = new Player(); //this doesn't work, Ivan (- Victor)
+				
 					ArenaArray.playerPosition[1] += 1;	
 					human.setTranslateY(human.getTranslateY()-10);
 					}

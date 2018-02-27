@@ -2,13 +2,13 @@ import java.util.Arrays;
 import java.util.Random;
 public class Player extends Dungeon{
 	//fields for a player instance
-	private int health;
+	private int health =100;
 	private int[][] inventory;
 	//inventory of objects
 	
 	//constructors
 	public Player() {
-		
+		Item item = new Item();
 	}
 	
 	public Player(int startingHealth, int[][] inventory) { //more attributes to come
@@ -30,10 +30,10 @@ public class Player extends Dungeon{
 			switch(rng.nextInt(3)) {
 				case 0:
 				case 1:
-					Item potion = new Potion();
+					Potion potion = new Potion();
 					break;
-				case 2:
-					Item weapon = new Weapon();
+					case 2:
+					Weapon weapon = new Weapon();
 					break;
 			}
 		}

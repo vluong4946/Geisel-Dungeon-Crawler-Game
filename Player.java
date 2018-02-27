@@ -1,6 +1,6 @@
 import java.util.Arrays;
 import java.util.Random;
-public class Player {
+public class Player extends Dungeon{
 	//fields for a player instance
 	private int health;
 	private int[][] inventory;

@@ -33,15 +33,15 @@ int[][] arena = ArenaArray.createArenaArray();
 		root.setPrefSize(1500, 1000);
 		human = initHuman();
 		
-		
+		//**** will redo resolution later on hopefully...
 		for (int x = 0; x < arena.length; x++){
 		    for (int y = 0; y < arena[x].length; y++){
-		    	if (arena[x][y]==3) {
+		    	if (arena[x][y]==3) { //REPLACE MAGIC NUMBERS -Victor
 		    		root.add(new Rectangle(10, 10, Color.BLACK), x, y);
 		    		nodes.add(new Rectangle(10, 10, Color.BLACK));}
-		    	else if (arena[x][y]==2) {
-			    	root.add(new Rectangle(10, 10, Color.WHITE), x, y);
-		    		nodes.add(new Rectangle(10, 10, Color.WHITE));}
+		    	else if (arena[x][y]==2) { 
+			    	root.add(new Rectangle(10, 10, Color.PINK), x, y);
+		    		nodes.add(new Rectangle(10, 10, Color.PINK));}
 		    	else if (arena[x][y]==1) {
 			    	root.add(new Rectangle(10, 10, Color.WHITE), x, y);
 		    		nodes.add(new Rectangle(10, 10, Color.WHITE));}
@@ -166,11 +166,11 @@ int[][] arena = ArenaArray.createArenaArray();
 				//		System.out.println("You pick up an item");
 				//	}
 				if(ArenaArray.getAbove(arena) != ArenaArray.WALL) {
-				if(ArenaArray.getAbove(arena) == ArenaArray.ENEMY)
+					if(ArenaArray.getAbove(arena) == ArenaArray.ENEMY)
 						System.out.println("You enter battle");
-				if(ArenaArray.getAbove(arena) == ArenaArray.ITEM)
+					if(ArenaArray.getAbove(arena) == ArenaArray.ITEM)
 						System.out.println("You pick up an item");
-						Player Item = new Player();
+						Player Item = new Player(); //this doesn't work, Ivan (- Victor)
 					ArenaArray.playerPosition[1] += 1;	
 					human.setTranslateY(human.getTranslateY()-10);
 					}

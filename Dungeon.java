@@ -21,9 +21,20 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+/**
+ * This class contains the code used for the beginning screen (account creation 
+ * and logging in). It creates the GUI used for gameplay. It contains the movement
+ * controls for the player (WASD-Keys). 
+ * 
+ * NOTES: 
+ * Will likely split this into multiple classes later on, and make code more
+ * readable and concise with more methods. 
+ *
+ */
 public class Dungeon extends Application{
 
-int[][] arena = ArenaArray.createArenaArray();
+	//Create array for playing field
+	int[][] arena = ArenaArray.createArenaArray();
 	
 	private ArrayList<Shape> nodes;
 	
@@ -154,7 +165,14 @@ int[][] arena = ArenaArray.createArenaArray();
 	    	if(e.getSource() == btn)
 	    		primaryStage.setScene(sc);
 	    
-				
+		/*The following switch statement allows WASD input from the player. 
+		 * Should the player make an encounter with a node such as a wall, enemy,
+		 * or item, the appropriate events would ensue (events not implemented
+		 * yet. ATM it's just some print statements saying you encountered something. 
+		 * 
+		 * NOTE: not fully functional. Logic errors present - sometimes encountering
+		 * something will not prompt approprite events. Also we can walk through
+		 * walls. */		
 		sc.setOnKeyPressed(ke -> {
 			switch (ke.getCode()) {
 			case W:

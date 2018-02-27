@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
@@ -21,9 +20,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
-
-
 
 public class Dungeon extends Application{
 
@@ -174,6 +170,7 @@ int[][] arena = ArenaArray.createArenaArray();
 						System.out.println("You enter battle");
 				if(ArenaArray.getAbove(arena) == ArenaArray.ITEM)
 						System.out.println("You pick up an item");
+						Player Item = new Player();
 					ArenaArray.playerPosition[1] += 1;	
 					human.setTranslateY(human.getTranslateY()-10);
 					}

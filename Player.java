@@ -12,51 +12,63 @@ import java.util.ArrayList;
  * Its features are still not present in the game. 
  *
  */
-public class Player extends testmian_toplayer{
+public class PlayerTest extends testmain_toplayer{
 	//fields for a player instance
 	private int health = 100;
-
+	public int[] attackValue = new int[3];
 	private int[] inventory = new int[9];
+	private int itemNumber = -1;
+	private int MAXITEMSPACE = 20;
 	//inventory of objects
 	
 	//constructors
-	public Player() {
+	public PlayerTest() {
 		//ArrayList<Item> inventory = new ArrayList<>();
-		//Item[] inventory = new Item[20];
-		Item item = new Item();
+		Item[] item = new Item[MAXITEMSPACE];
+		item[itemNumber] = new Item();
+		item[itemNumber].Itemcreate();
 	}
 	
-	public Player(int startingHealth, int[] inventory) { //more attributes to come
+	public PlayerTest(int startingHealth, int[] inventory) { //more attributes to come
 		this.health = startingHealth;
 		this.inventory = inventory;
 		
 	}
 	
 	//Creates new instance of Player
-	public void createPlayer() {
-		Player player = new Player();
+//	public void createPlayer() {
+//		Player player = new Player();
+//	}
+	public void stats(){
+		System.out.println(attackValue[0]);
 	}
 	
 	/**
 	 * Class for Item objects and its subclasses. 
 	 */
 	class Item{
-		Random rng = new Random();
+		
 		String itemName;
 		
-		public Item() {
+		public void Itemcreate() {
+			Random rng = new Random();
 			switch(rng.nextInt(3)) {
 				case 0:
 				case 1:
 					Potion potion = new Potion();
+					potion.potionEncountered();
 					break;
 				case 2:
 					Weapon weapon = new Weapon();
+					weapon.weaponEncountered();
 					break;
 			}
 		}
 		class Potion extends Item{
 			int potionValue;
+			Random rng = new Random();
+//			public Potion() {
+//			}
 			public int potionEncountered() {
 			switch (rng.nextInt(10)) {
 				case 0: 
@@ -99,9 +111,10 @@ public class Player extends testmian_toplayer{
 			
 			}
 				class Weapon extends Item{	
-				public int[] attackValue = new int[3];
+//				public int[] attackValue = new int[3];
 				//Programing attack, Math Attack, Art Attack in this order
 					public int[] weaponEncountered() {
+					Random rng = new Random();
 					switch (rng.nextInt(6)) {
 					case 0:
 					case 1:

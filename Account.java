@@ -19,7 +19,7 @@ I gonna edit to
 1. check the ID exists after players type a new playername in MakingNewAccount
 2. in loadingAccount, If the code could not find the player's name,
    it gonna ask player whether he or she want to make new account or type again.
-3. 
+3. check password also
 ****I know this code is really dirty!! I will organize it after finish****
 */
 import javafx.event.ActionEvent;

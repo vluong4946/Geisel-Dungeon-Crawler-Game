@@ -1,5 +1,27 @@
 //import java.util.*;
-
+/*
+This java file does
+1. making new accounts -> MakingNewAccount(pane)
+2. saving the new accounts in text file(so called, "Account.txt") -> MakingNewAccount(pane)
+3. loading the accounts -> loadingAccount(pane)
+4. reading the information from txt.file ->
+5. put players' information into customers[][]
+		
+		 *  customers[n][1] : playerName;
+		 *  customers[n][2] : password
+		 *  customers[n][3] : major
+		 *  customers[n][4] : bestScore
+		 
+6. After pressing login button, it shows the player successes to login & information(playername, major, and bestScore) ->loginSuccess
+7. in loginSuccess class, I made start button,and I gonna make a connection to game later
+==================================================
+I gonna edit to 
+1. check the ID exists after players type a new playername in MakingNewAccount
+2. in loadingAccount, If the code could not find the player's name,
+   it gonna ask player whether he or she want to make new account or type again.
+3. 
+****I know this code is really dirty!! I will organize it after finish****
+*/
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

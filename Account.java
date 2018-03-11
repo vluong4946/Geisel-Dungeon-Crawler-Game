@@ -1,4 +1,5 @@
 //import java.util.*;
+//import java.util.*;
 /*
 This java file does
 1. making new accounts -> MakingNewAccount(pane)
@@ -22,6 +23,7 @@ I gonna edit to
 3. check password also
 ****I know this code is really dirty!! I will organize it after finish****
 */
+
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -50,9 +52,12 @@ public class Account {
 	String pw = "";
 	String major;
 	String bestScore = "0";
+	int bestNum = 0;
 	static int option;
 	static int numofPpl = 100;
 	String[][] customers = new String[numofPpl][4];
+	boolean success = false;
+
 	
 	public Account() {
 		
@@ -79,9 +84,10 @@ public class Account {
 	{
 		this.major = maj;
 	}
-	public void setScore(String score)
+	public void setScore(String score, int sc)
 	{
 		this.bestScore = score;
+		this.bestNum = sc;
 	}
 
 	public void setNumofPlayer(int n)
@@ -100,10 +106,10 @@ public class Account {
 			}
 		}
 		/*
-		 *  customers[n][1] : playerName;
-		 *  customers[n][2] : password
-		 *  customers[n][3] : major
-		 *  customers[n][4] : bestScore
+		 *  customers[n][0] : playerName;
+		 *  customers[n][1] : password
+		 *  customers[n][2] : major
+		 *  customers[n][3] : bestScore
 		 */
 	}
 	public String getplayerInfo(int num, int opt) {
@@ -232,47 +238,62 @@ public class Account {
 		hbBtn.getChildren().add(btn);
 		pane1.add(hbBtn, 0, 8);
 
-		
+		System.out.println("How many times do i come here?");
 
 		btn.setOnAction((ActionEvent e) -> {
+			success = false;
 
-		setUserText(userTextField.getText());
-		setpwText(pwField.getText());
-
-		for(int i = 0; i < numofPpl; i++)
-		if(userTextField.getText() == customers[i][0])
+		for(int i = 0; i < numofPpl; i++) {
+		if(userTextField.getText().equals(getplayerInfo(i,0)))
 		{
-			final Text actiontarget = new Text("There is same ID. Give me another playername");
-			pane1.add(actiontarget,1, 6);
+			try {
+				pane1.getChildren().clear();
+				final Text actiontarget = new Text("There is same ID. Give me another playername");
+				actiontarget.setTranslateX(170);
+				actiontarget.setTranslateY(250);
+				actiontarget.setFill(Color.YELLOW);
+				actiontarget.setFont(Font.font("Press Start K", FontWeight.BOLD, 15));
+				pane1.getChildren().add(actiontarget);
+
+				MakingNewAccount(pane1);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			success = true;
+		}}
+		if(success == false) {
+
+			setUserText(userTextField.getText());
+			setpwText(pwField.getText());
 			
-		}
-		try {
-			bw.write(playerName);
-			bw.newLine();
-			bw.write(pw);
-			bw.newLine();
-			bw.write(major);
-			bw.newLine();
-			bw.write("0");
-			bw.newLine();
+			try {
+				
+				bw.write(playerName);
+				bw.newLine();
+				bw.write(pw);
+				bw.newLine();
+				bw.write(major);
+				bw.newLine();
+				bw.write("0");
+				bw.newLine();
+				bw.flush();
+				
+				bw.close();
+				fw.close();
+				
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 
-			bw.flush();
-			
-			bw.close();
-			fw.close();
-
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-
-		System.out.println("Player " + playerName);
-		System.out.println("Password " + pw);
-
-		});	
+		pane1.getChildren().clear();
+		loginSuccess(pane1);
+		}});	
 				
 		}
+	
+	
 	public void loadingAccount(GridPane pane1) throws Exception
 	{
 		readingInfo();
@@ -338,59 +359,116 @@ public class Account {
 		pane1.getChildren().add(pwField);
 		
 		Button btn = new Button("Login");
-		HBox hbBtn = new HBox(10);
-		hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
-		hbBtn.getChildren().add(btn);
-		pane1.add(hbBtn, 0, 8);
+		pane1.add(btn, 0, 8);
+		btn.setTranslateX(300);
+		btn.setTranslateY(0);
 
 		btn.setOnAction((ActionEvent e) -> {
 			
 			for(int i = 0 ; i < numofPpl ; i++)
 			{
-				System.out.print(userTextField.getText() +" ");
-				System.out.println(customers[i][0]);
-				if(userTextField.getText().equals(getplayerInfo(i,0))) //  check there is same ID with it
+				if(userTextField.getText().equals(getplayerInfo(i,0)) && pwField.getText().equals(getplayerInfo(i,1))) //  check there is same ID with it
 					{
+					success = true;
 					setUserText(getplayerInfo(i,0));
 					setpwText(getplayerInfo(i,1));
 					setmajorText(getplayerInfo(i,2));
-					setScore(getplayerInfo(i,3));
+					setScore(getplayerInfo(i,3), Integer.parseInt(getplayerInfo(i,3)));
+					pane1.getChildren().clear();
 					loginSuccess(pane1);
+
 					}
 			}
-			/*
+			if(success == false)
+			{
+			System.out.print("plz no");
+			Rectangle back = new Rectangle(1000,800,800,500);
+			back.setFill(Color.BLACK);
+			back.setTranslateX(-85);
+			back.setTranslateY(160);
+			pane1.getChildren().add(back);
+			
 			Text Denying = new Text("Sorry, your account doesn't exist.");
-			Denying.setTranslateX(0);
-			Denying.setTranslateY(0);
+			Denying.setTranslateX(15);
+			Denying.setTranslateY(-20);
 			Denying.setFill(Color.WHITE);
 			Denying.setFont(Font.font("Press Start K", FontWeight.BOLD, 20));
 			pane1.getChildren().add(Denying);
 		
 			Text asking = new Text("Do you want to make new account?");
-			asking.setTranslateX(50);
-			asking.setTranslateY(0);
+			asking.setTranslateX(15);
+			asking.setTranslateY(20);
 			asking.setFill(Color.WHITE);
 			asking.setFont(Font.font("Press Start K", FontWeight.BOLD, 20));
 			pane1.getChildren().add(asking);
 			
-			Button bt1 = new Button("");
-			bt1.setTranslateX(80);
-			bt1.setTranslateY(80);
+			Button bt1 = new Button("Making New Account");
+			bt1.setTranslateX(160);
+			bt1.setTranslateY(150);
+			bt1.setTextFill(Color.WHITE);
+	        bt1.setStyle("-fx-background-color: transparent");
 			bt1.setFont(Font.font("Press Start K", FontWeight.BOLD, 20));
-			pane1.getChildren().add(bt1);
 			
-			Button bt2 = new Button("");
-			bt2.setTranslateX(80);
-			bt2.setTranslateY(190);
+			Label btlabel = new Label("*");
+			btlabel.setFont(Font.font("Press Start K", FontWeight.BOLD, 20));
+			btlabel.setTranslateX(50);
+			btlabel.setTranslateY(150);
+			btlabel.setTextFill(null);
+			pane1.getChildren().addAll(bt1,btlabel);
+			
+			Button bt2 = new Button("Go back to loading page");
+			bt2.setTranslateX(110);
+			bt2.setTranslateY(220);
+			bt2.setTextFill(Color.WHITE);
+	        bt2.setStyle("-fx-background-color: transparent");
 			bt2.setFont(Font.font("Press Start K", FontWeight.BOLD, 20));
-			pane1.getChildren().add(bt2);
-			System.out.print("Why am i here?");
-		*/
-		});
-
+			
+			Label btlabel1 = new Label("*");
+			btlabel1.setFont(Font.font("Press Start K", FontWeight.BOLD, 20));
+			btlabel1.setTranslateX(50);
+			btlabel1.setTranslateY(220);
+			btlabel.setTextFill(null);
+			pane1.getChildren().addAll(bt2,btlabel1);
+			
+			
+		    bt1.setOnMouseMoved((effect)->{
+		    	btlabel.setTextFill(Color.BROWN);
+		    });
+		    bt1.setOnMouseExited((effect)->{
+		    	btlabel.setTextFill(Color.BLACK);
+		    });
+		    
+		    bt2.setOnMouseMoved((effect)->{
+		    	btlabel1.setTextFill(Color.BROWN);
+		    });
+		    bt2.setOnMouseExited((effect)->{
+		    	btlabel1.setTextFill(Color.BLACK);
+		    });
+		    
+			bt1.setOnAction(event->{
+				try {
+					pane1.getChildren().clear();
+					MakingNewAccount(pane1);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			});
+			
+			bt2.setOnAction(event->{
+				try {
+					pane1.getChildren().clear();
+					loadingAccount(pane1);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			});
+			}
+			});
+}
 		
-		
-	}
+	
 	
 	public void readingInfo() throws Exception {
 		
@@ -429,75 +507,178 @@ public class Account {
 	{
 		
 		System.out.print("I enter loginSuccess class");
+
+//		Rectangle border = new Rectangle(100,100,100,100);
+//
+//		border.setFill(Color.WHITE);
+//		border.setTranslateX(-85);
+//		border.setTranslateY(-80);
+//		border.setStyle("-fx-border-color : white"); 
+//		border.setStyle("-fx-border-width : 5");
+//		border.setStyle("-fx-border-style : segments(10,15,15,15) line-cap round"); 
+//		pane1.getChildren().add(border);
 		
 		Rectangle back = new Rectangle(1000,800,800,500);
 		back.setFill(Color.BLACK);
-		back.setTranslateY(-80);
+		back.setTranslateX(-85);
 		back.setTranslateY(160);
 		pane1.getChildren().add(back);
 		
 		Text login = new Text("<Login Successfully>");
 		login.setFill(Color.WHITE);
 		login.setFont(Font.font("Press Start K", FontWeight.BOLD, 20));
-		login.setTranslateX(200);
-		login.setTranslateY(0);
+		login.setTranslateX(206);
+		login.setTranslateY(-200);
 		pane1.getChildren().add(login);
 		
 		Text userText = new Text("Player Name: ");
 		userText.setFill(Color.WHITE);
 		userText.setFont(Font.font("Press Start K", FontWeight.BOLD, 20));
-		userText.setTranslateX(100);
-		userText.setTranslateY(70);
+		userText.setTranslateX(135);
+		userText.setTranslateY(-130);
 		pane1.getChildren().add(userText);
 		
 		Text user = new Text(getplayerName());
 		user.setFill(Color.WHITE);
 		user.setFont(Font.font("Press Start K", FontWeight.BOLD, 20));
-		user.setTranslateX(500);
-		user.setTranslateY(70);
+		user.setTranslateX(510);
+		user.setTranslateY(-130);
 		pane1.getChildren().add(user);
 		
 		Text MajorText = new Text("Major: ");
 		MajorText.setFill(Color.WHITE);
 		MajorText.setFont(Font.font("Press Start K", FontWeight.BOLD, 20));
-		MajorText.setTranslateX(100);
-		MajorText.setTranslateY(140);
+		MajorText.setTranslateX(135);
+		MajorText.setTranslateY(-90);
 		pane1.getChildren().add(MajorText);
 		
 		Text Majoris = new Text(getMajor());
 		Majoris.setFill(Color.WHITE);
 		Majoris.setFont(Font.font("Press Start K", FontWeight.BOLD, 20));
-		Majoris.setTranslateX(500);
-		Majoris.setTranslateY(140);
+		Majoris.setTranslateX(510);
+		Majoris.setTranslateY(-90);
 		pane1.getChildren().add(Majoris);
 		
 		Text scoreText = new Text("Best Score: ");
 		scoreText.setFill(Color.WHITE);
 		scoreText.setFont(Font.font("Press Start K", FontWeight.BOLD, 20));
-		scoreText.setTranslateX(100);
-		scoreText.setTranslateY(210);
+		scoreText.setTranslateX(135);
+		scoreText.setTranslateY(-50);
 		pane1.getChildren().add(scoreText);
 		
 		Text scoreIs = new Text(getBestScore());
 		scoreIs.setFill(Color.WHITE);
 		scoreIs.setFont(Font.font("Press Start K", FontWeight.BOLD, 20));
-		scoreIs.setTranslateX(500);
-		scoreIs.setTranslateY(210);
+		scoreIs.setTranslateX(510);
+		scoreIs.setTranslateY(-50);
 		pane1.getChildren().add(scoreIs);
 		
 		Button start = new Button("Start");
 		start.setTextFill(Color.BLACK);
 		start.setFont(Font.font("Press Start K", FontWeight.BOLD, 20));
-		start.setTranslateX(330);
+		start.setTranslateX(370);
 		start.setTranslateY(300);
 		pane1.getChildren().add(start);
 	}
 
 	public String updateScore(int best) {
-		bestScore= Integer.toString(best);
-		setScore(bestScore);
+		if(best > bestNum)
+		{
+			bestScore= Integer.toString(best);
+			setScore(bestScore,best);			
+		}
+
 		return bestScore;
 	}
 
-}
+	public void rankingScore(GridPane pane1) throws Exception {
+		readingInfo();
+		
+		Text Jointitle = new Text("TOP SCORE");
+		Jointitle.setFont(Font.font("Press Start K", FontWeight.BOLD, 60));
+		Jointitle.setFill(Color.BROWN);
+		Jointitle.setTranslateX(550);
+		Jointitle.setTranslateY(180);
+		
+	    DropShadow dropShadow = new DropShadow(); 
+	    dropShadow.setBlurType(BlurType.GAUSSIAN); 
+	    dropShadow.setColor(Color.ROSYBROWN); 
+	    dropShadow.setHeight(8); 
+	    dropShadow.setWidth(5);
+	    dropShadow.setRadius(5); 
+	      
+	    dropShadow.setOffsetX(3); 
+	    dropShadow.setOffsetY(2); 
+	      
+	    dropShadow.setSpread(12);  
+
+	    Jointitle.setEffect(dropShadow);  
+	    
+ 	    pane1.getChildren().add(Jointitle);
+ 	    
+		int[] rank = new int[numofPpl];
+		
+		for(int i  = 0; i < numofPpl ; i++) {
+			rank[i] = 1;
+			
+			for(int j = 0 ; j < numofPpl; j++)
+			{
+				int iscore = Integer.parseInt(customers[i][3]);
+				int jscore = Integer.parseInt(customers[j][3]);
+				if(iscore < jscore) {
+					rank[i]++;
+				}
+			}
+		}
+		
+		for(int i = 1; i <=10; i++)
+		{
+			for(int j = 0; j < numofPpl;j++)
+			if(rank[j] == i)
+			{	
+				Text rank1 = new Text(customers[j][0]);
+				rank1.setTranslateX(600);
+				rank1.setTranslateY(300+j*45);
+				rank1.setFill(Color.WHITE);
+				rank1.setFont(Font.font("Press Start K", FontWeight.BOLD, 30));
+				pane1.getChildren().add(rank1);
+				
+				Text rank2 = new Text( "  >>  " + customers[j][3]);
+				rank2.setTranslateX(680);
+				rank2.setTranslateY(300+j*45);
+				rank2.setFill(Color.WHITE);
+				rank2.setFont(Font.font("Press Start K", FontWeight.BOLD, 30));
+				pane1.getChildren().add(rank2);
+				System.out.println(i + "   :" + customers[j][3]);				
+			}
+		}
+	}
+ 		public void Ending(GridPane pane1) {
+ 			System.out.println("Ending works");
+ 		   
+ 			Text endingtitle = new Text("THANK YOU FOR ENJOYING");
+ 			endingtitle.setFont(Font.font("Press Start K", FontWeight.BOLD, 60));
+ 			endingtitle.setFill(Color.BROWN);
+ 			endingtitle.setTranslateX(80);
+ 			endingtitle.setTranslateY(300);
+ 		    DropShadow dropShadow = new DropShadow(); 
+ 		    dropShadow.setBlurType(BlurType.GAUSSIAN); 
+ 		    dropShadow.setColor(Color.ROSYBROWN); 
+ 		    dropShadow.setHeight(8); 
+ 		    dropShadow.setWidth(5);
+ 		    dropShadow.setRadius(5); 
+ 		      
+ 		    dropShadow.setOffsetX(3); 
+ 		    dropShadow.setOffsetY(2); 
+ 		      
+ 		    dropShadow.setSpread(12);  
+
+ 		    endingtitle.setEffect(dropShadow);  
+ 		    
+ 	 	    pane1.getChildren().add(endingtitle);
+ 		}
+ 		
+
+	}
+
 

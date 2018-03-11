@@ -30,10 +30,10 @@ public class GameGui extends Application{
 	private HBox topHBox;
 	private GridPane tilesGridPane;
 	private Text floorNumText;
-	private BorderPane borderPane;
-	private Scene scene;
 	private Node human;
 	private Node flashlight;
+	Stage window;
+	Scene scene;
 	//private GridPane humanGridPane;
 	
 	private Floor floor;
@@ -44,7 +44,7 @@ public class GameGui extends Application{
 	
 	//Methods
 	public void start(Stage primaryStage) {
-		
+		window=primaryStage;
 		createGui(primaryStage); //1 is temporary for testing
 		
 		
@@ -105,7 +105,7 @@ public class GameGui extends Application{
 		BorderPane borderPane = new BorderPane();
 		borderPane.setCenter(stack);
 		borderPane.setTop(topHBox);
-		Scene scene = new Scene(borderPane);
+		scene = new Scene(borderPane);
 		primaryStage.setScene(scene);
 		
 		
@@ -144,10 +144,10 @@ public class GameGui extends Application{
 			//Probably break these up into methods. 
 			case UP: 
 				switch(floor.getAbove()) {
-				case GameTile.WALL: floor.promptEncounters(floor.getAbove()); break;
+				case GameTile.WALL: promptEncounters(floor.getAbove()); break;
 				default:
 					CoverPreviousTile();
-					floor.promptEncounters(floor.getAbove());
+					promptEncounters(floor.getAbove());
 					floor.moveUp();
 					
 					//Visually update position
@@ -157,10 +157,10 @@ public class GameGui extends Application{
 				break;
 			case LEFT:
 				switch(floor.getLeft()) {
-				case GameTile.WALL: floor.promptEncounters(floor.getLeft()); break;
+				case GameTile.WALL: promptEncounters(floor.getLeft()); break;
 				default:
 					CoverPreviousTile();
-					floor.promptEncounters(floor.getLeft());
+					promptEncounters(floor.getLeft());
 					floor.moveLeft();
 					human.setTranslateX(human.getTranslateX() - GameTile.TILE_DIMENSIONS);
 					flashlight.setTranslateX(flashlight.getTranslateX() - GameTile.TILE_DIMENSIONS);
@@ -168,10 +168,10 @@ public class GameGui extends Application{
 				break;
 			case DOWN:
 				switch(floor.getBelow()) {
-				case GameTile.WALL: floor.promptEncounters(floor.getBelow()); break;
+				case GameTile.WALL: promptEncounters(floor.getBelow()); break;
 				default:
 					CoverPreviousTile();
-					floor.promptEncounters(floor.getBelow());
+					promptEncounters(floor.getBelow());
 					floor.moveDown();
 					human.setTranslateY(human.getTranslateY() + GameTile.TILE_DIMENSIONS);
 					flashlight.setTranslateY(flashlight.getTranslateY() + GameTile.TILE_DIMENSIONS);
@@ -179,17 +179,29 @@ public class GameGui extends Application{
 				break;
 			case RIGHT:
 				switch(floor.getRight()) {
-				case GameTile.WALL: floor.promptEncounters(floor.getRight()); break;
+				case GameTile.WALL: promptEncounters(floor.getRight()); break;
 				default:
 					CoverPreviousTile();
-					floor.promptEncounters(floor.getRight());
+					promptEncounters(floor.getRight());
 					floor.moveRight();
 					human.setTranslateX(human.getTranslateX() + GameTile.TILE_DIMENSIONS);
 					flashlight.setTranslateX(flashlight.getTranslateX() + GameTile.TILE_DIMENSIONS);
 				}
 				break;
+			default:
+				break;
 			}
 		});		
+	}
+	
+	public void promptEncounters(int nodeEncountered) {
+		switch(nodeEncountered) {
+		case GameTile.WALL: System.out.println("You encounter a wall."); break; 
+		case GameTile.ENEMY: System.out.println("e");
+		window.setScene(BattleScene.battle); break; //fill in
+		case GameTile.ITEM: System.out.println("i"); break; //fill in
+//		case GameTile.EXIT: System.out.println("exit"); break; //fill in
+		}
 	}
 	
 	/*
@@ -244,14 +256,7 @@ class Floor extends StackPane{
 	 * Prompts the appropriate events depending on what type node is encountered
 	 * by the player. 
 	 */
-	public void promptEncounters(int nodeEncountered) {
-		switch(nodeEncountered) {
-		case GameTile.WALL: System.out.println("You encounter a wall."); break; 
-		case GameTile.ENEMY: System.out.println("e"); break; //fill in
-		case GameTile.ITEM: System.out.println("i"); break; //fill in
-//		case GameTile.EXIT: System.out.println("exit"); break; //fill in
-		}
-	}
+	
 
 	/*
 	 * Method: move__

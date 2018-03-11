@@ -6,11 +6,6 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-
-
-
-
-
 public class BattleScene{
 
 static StackPane battlePane;
@@ -46,6 +41,7 @@ tritonIV.setFitWidth(200);
 tritonIV.setPreserveRatio(true);
 tritonIV.setSmooth(true);
 tritonIV.setCache(true);
+
 
 
 //Assigns actions to the buttons
@@ -101,6 +97,28 @@ battle = new Scene(battlePane,GameGui.P_STAGE_SIZE,GameGui.P_STAGE_SIZE);
 
 return battle;
 }
+
+//methods for each action
+public static void attack() {
+
+	updateBattle();
+}
+
+public static void skill() {
+	
+	updateBattle();
+}
+
+public static void item() {
+	
+	updateBattle();
+}
+
+public static void run() {
+	
+	updateBattle();
+}
+
 
 public static void updateBattle(){
 	

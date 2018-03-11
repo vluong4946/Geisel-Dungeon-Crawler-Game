@@ -32,8 +32,8 @@ public class GameGui extends Application{
 	private Text floorNumText;
 	private Node human;
 	private Node flashlight;
-	Stage window;
-	Scene scene;
+	static Stage window;
+	static Scene scene;
 	//private GridPane humanGridPane;
 	
 	private Floor floor;
@@ -198,7 +198,7 @@ public class GameGui extends Application{
 		switch(nodeEncountered) {
 		case GameTile.WALL: System.out.println("You encounter a wall."); break; 
 		case GameTile.ENEMY: System.out.println("e");
-		window.setScene(BattleScene.battle); break; //fill in
+		window.setScene(BattleScene.battleStart()); break; //fill in
 		case GameTile.ITEM: System.out.println("i"); break; //fill in
 //		case GameTile.EXIT: System.out.println("exit"); break; //fill in
 		}

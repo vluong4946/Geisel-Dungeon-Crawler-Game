@@ -7,6 +7,8 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import java.util.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class GameTile extends StackPane{
 	//Fields

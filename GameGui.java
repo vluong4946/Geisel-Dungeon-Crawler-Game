@@ -77,8 +77,10 @@ public class GameGui extends Application{
 						, col, row);
 			}
 		}
-		//Place player into the GridPane
-		tilesGridPane.add(createHuman(), COL_START, ROW_START); //magic numbers
+		
+		human = createHuman();
+		tilesGridPane.add(human, COL_START, ROW_START);
+		
 		
 		
 		//Create borderPane and scene
@@ -93,6 +95,13 @@ public class GameGui extends Application{
 		primaryStage.show();
 		
 		//From now on, player controls the human node. 
+		scene.setOnKeyPressed(key -> {
+			switch(key.getCode()) {
+			case W: human.setTranslateY(human.getTranslateY() - GameTile.TILE_DIMENSIONS);
+			
+			break;
+			}
+		});
 	}
 	
 	/*
@@ -121,7 +130,7 @@ class Floor extends StackPane{
 	private static int[][] wallsArray;
 	
 	
-	private static final int FLOOR_ARRAY_SIZE = GameGui.GRID_PANE_SIZE;
+	private static final int FLOOR_ARRAY_SIZE = GameGui.NUM_TILES_PER_SIDE;
 
 	/*
 	 * The constructor for Floor stores the floorNum and the layout of

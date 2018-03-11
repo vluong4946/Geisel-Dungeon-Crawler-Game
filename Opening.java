@@ -1,6 +1,8 @@
 import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.io.IOException;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -19,7 +21,7 @@ import javafx.scene.effect.*;
 
 public class Opening extends Application {
 
-	
+		private Account account;
 	public static void Opening(Stage primaryStage) throws Exception {
 	    
 	}
@@ -30,14 +32,8 @@ public class Opening extends Application {
 
 		Scene scene,scene1;
 		
-		String file = "Account.txt";
+		account = new Account();
 
-		FileWriter fw = new FileWriter(file);
-		BufferedWriter bw = new BufferedWriter(fw);
-		
-		Account account = new Account();
-
-		//primaryStage.setScene(new Scene(createContent()));
 		primaryStage.centerOnScreen();
 		primaryStage.show();
 		
@@ -47,23 +43,27 @@ public class Opening extends Application {
 	    primaryStage.setScene(scene);
 	    primaryStage.setTitle("OpeningPage"); // Set the stage title
 	    
+	    
 	    Label label = new Label("Geisel Library Crawl");
-
 	    label.setTextFill(Color.BROWN);
 	    label.setFont(Font.font("Press Start K", FontWeight.BOLD, 50));
 	    label.setTranslateX(250);
 	    label.setTranslateY(180);
-	   
-	    DropShadow dropShadow = new DropShadow(); 
+	    
+		Label copyRight = new Label("©2018 THE SALTY SPITOON");
+		copyRight.setFont(Font.font("Press Start K", FontWeight.BOLD, 20));
+		copyRight.setTranslateX(500);
+		copyRight.setTranslateY(250);
+	    copyRight.setTextFill(Color.WHITE);
+	    
+		DropShadow dropShadow = new DropShadow(); 
 	    dropShadow.setBlurType(BlurType.GAUSSIAN); 
 	    dropShadow.setColor(Color.ROSYBROWN); 
 	    dropShadow.setHeight(8); 
 	    dropShadow.setWidth(5);
-	    dropShadow.setRadius(5); 
-	      
+	    dropShadow.setRadius(5);
 	    dropShadow.setOffsetX(3); 
 	    dropShadow.setOffsetY(2); 
-	      
 	    dropShadow.setSpread(12);  
 
 	    label.setEffect(dropShadow);  
@@ -132,7 +132,7 @@ public class Opening extends Application {
 		quitlabel.setMaxSize(450, 500);
 		quitlabel.setTextFill(null);
 
-		pane.getChildren().addAll(btlabel,loadlabel, ranklabel,quitlabel);
+		pane.getChildren().addAll(copyRight,btlabel,loadlabel, ranklabel,quitlabel);
 		pane.getChildren().addAll(load,bt,rank,quit);
 	    pane.setStyle("-fx-background-color: black;");
 	    
@@ -145,14 +145,17 @@ public class Opening extends Application {
 	    });
 	    bt.setOnAction((ActionEvent e) -> {
 	    		primaryStage.setScene(scene1);
-	    		try {
-					Account.MakingNewAccount(pane1);
+			    try {
+					account.MakingNewAccount(pane1);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-	    		
 			});
+	    
 	    load.setOnMouseMoved((effect)->{
 	    	loadlabel.setTextFill(Color.BROWN);
 	    });
@@ -160,11 +163,32 @@ public class Opening extends Application {
 	    	loadlabel.setTextFill(Color.BLACK);
 	    });
 	    
+	    load.setOnAction((ActionEvent e)->{
+	    	primaryStage.setScene(scene1);
+	    	try {
+				account.loadingAccount(pane1);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+	    });
 	    rank.setOnMouseMoved((effect)->{
 	    	ranklabel.setTextFill(Color.BROWN);
 	    });
 	    rank.setOnMouseExited((effect)->{
 	    	ranklabel.setTextFill(Color.BLACK);
+	    });
+	    rank.setOnAction((ActionEvent e)->{
+	    	primaryStage.setScene(scene1);
+	    	try {
+				account.rankingScore(pane1);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 	    });
 	    quit.setOnMouseMoved((effect)->{
 	    	quitlabel.setTextFill(Color.BROWN);
@@ -172,8 +196,16 @@ public class Opening extends Application {
 	    quit.setOnMouseExited((effect)->{
 	    	quitlabel.setTextFill(Color.BLACK);
 	    });
+	    quit.setOnAction((ActionEvent e)->{
+	    	primaryStage.setScene(scene1);
+	    	try {
+				account.Ending(pane1);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+	    });
 	}
-	
 	public static void main(String [] args)
 	{
 		Application.launch(args);

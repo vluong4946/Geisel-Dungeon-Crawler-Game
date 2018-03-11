@@ -1,16 +1,14 @@
 import javafx.application.*;
-import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.*;
 import javafx.scene.paint.*;
 import javafx.scene.shape.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
-import javafx.event.*;
-import javafx.scene.input.*;
 import javafx.scene.text.*;
 import javafx.geometry.*;
-import java.util.*;
-import java.io.*;
+
 
 public class GameGui extends Application{
 	public static void main(String[] args) {
@@ -21,7 +19,7 @@ public class GameGui extends Application{
 	private static final int SPACE_BETWEEN_HBOX_NODES = 50;
 	private static final int INSETS_SPACING_FOR_HBOX = 20;
 	private static final String P_STAGE_TITLE = "Geisel Dungeon Crawler";
-	private static final int P_STAGE_SIZE = 800;
+	static final int P_STAGE_SIZE = 800;
 	public static final int GRID_PANE_SIZE = 600; 
 	
 	public static final int NUM_TILES_PER_SIDE = 
@@ -128,9 +126,14 @@ public class GameGui extends Application{
 	 * Creates a Node human to navigate the playing field. 
 	 */
 	public Node createHuman() {
-		human = new Rectangle(GameTile.TILE_DIMENSIONS, 
-				GameTile.TILE_DIMENSIONS, Color.LIGHTGREEN);
-		return human;
+		Image player = new Image("Player.png");
+		ImageView playerIV = new ImageView();
+		playerIV.setImage(player);
+		playerIV.setFitWidth(GameTile.TILE_DIMENSIONS);
+		playerIV.setPreserveRatio(true);
+		playerIV.setSmooth(true);
+		playerIV.setCache(true);
+		return playerIV;
 	}
 	private Node createFlashlight() {
 		Rectangle dark = new Rectangle(3*P_STAGE_SIZE,3*P_STAGE_SIZE,Color.GRAY);

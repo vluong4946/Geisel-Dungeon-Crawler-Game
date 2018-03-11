@@ -43,7 +43,6 @@ tritonIV.setSmooth(true);
 tritonIV.setCache(true);
 
 
-
 //Assigns actions to the buttons
 attack.setOnAction(e -> GameGui.window.setScene(GameGui.scene));
 
@@ -97,28 +96,6 @@ battle = new Scene(battlePane,GameGui.P_STAGE_SIZE,GameGui.P_STAGE_SIZE);
 
 return battle;
 }
-
-//methods for each action
-public static void attack() {
-
-	updateBattle();
-}
-
-public static void skill() {
-	
-	updateBattle();
-}
-
-public static void item() {
-	
-	updateBattle();
-}
-
-public static void run() {
-	
-	updateBattle();
-}
-
 
 public static void updateBattle(){
 	

@@ -11,6 +11,9 @@ import javafx.scene.text.*;
 import javafx.geometry.*;
 import java.util.*;
 import java.io.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 
 public class GameGui extends Application{
 	public static void main(String[] args) {

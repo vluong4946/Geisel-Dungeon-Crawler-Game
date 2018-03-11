@@ -122,9 +122,14 @@ public class GameGui extends Application{
 	 * Creates a Node human to navigate the playing field. 
 	 */
 	public Node createHuman() {
-		human = new Rectangle(GameTile.TILE_DIMENSIONS, 
-				GameTile.TILE_DIMENSIONS, Color.LIGHTGREEN);
-		return human;
+		Image player = new Image("Player.png");
+		ImageView playerIV = new ImageView();
+		playerIV.setImage(player);
+		playerIV.setFitWidth(GameTile.TILE_DIMENSIONS);
+		playerIV.setPreserveRatio(true);
+		playerIV.setSmooth(true);
+		playerIV.setCache(true);
+		return playerIV;
 	}
 	private Node createFlashlight() {
 		Rectangle dark = new Rectangle(3*P_STAGE_SIZE,3*P_STAGE_SIZE,Color.BLACK);

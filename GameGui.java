@@ -33,6 +33,7 @@ public class GameGui extends Application{
 	private BorderPane borderPane;
 	private Scene scene;
 	private Node human;
+	private Node flashlight;
 	//private GridPane humanGridPane;
 	
 	private Floor floor;
@@ -74,7 +75,7 @@ public class GameGui extends Application{
 		//Create floor# text and put it in topHBox
 		floorNumText = new Text("Floor: " + floorNum);
 		topHBox.getChildren().add(floorNumText);
-		topHBox.setAlignment(Pos.CENTER);
+		topHBox.setAlignment(Pos.TOP_LEFT);
 		
 		//Create GridPane to store empty GameTile objects to be overrided later on
 		tilesGridPane = new GridPane();
@@ -89,13 +90,22 @@ public class GameGui extends Application{
 		}
 		
 		human = createHuman();
+		flashlight = createFlashlight();
 		tilesGridPane.add(human, COL_START, ROW_START);
+
+		
+		//Create StackPane to store flashlight and tilesGridPane
+		StackPane stack = new StackPane();
+		stack.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+		stack.getChildren().addAll(tilesGridPane,flashlight);
+		stack.setTranslateX(-800);
+		stack.setTranslateY(-800);
 		
 		//Create borderPane and scene
-		borderPane = new BorderPane();
+		BorderPane borderPane = new BorderPane();
+		borderPane.setCenter(stack);
 		borderPane.setTop(topHBox);
-		borderPane.setCenter(tilesGridPane);
-		scene = new Scene(borderPane);
+		Scene scene = new Scene(borderPane);
 		primaryStage.setScene(scene);
 		
 		
@@ -116,6 +126,13 @@ public class GameGui extends Application{
 				GameTile.TILE_DIMENSIONS, Color.LIGHTGREEN);
 		return human;
 	}
+	private Node createFlashlight() {
+		Rectangle dark = new Rectangle(3*P_STAGE_SIZE,3*P_STAGE_SIZE,Color.BLACK);
+		Circle light = new Circle(990, 990, 70);
+		Shape flashlight = Shape.subtract(dark, light);
+		return flashlight;
+	}
+
 	
 	public void allowUserInput(Scene scene, Node human, int floorNum) {
 		//Create floor object
@@ -125,7 +142,7 @@ public class GameGui extends Application{
 		scene.setOnKeyPressed(key -> {
 			switch(key.getCode()) {
 			//Probably break these up into methods. 
-			case W: 
+			case UP: 
 				switch(floor.getAbove()) {
 				case GameTile.WALL: floor.promptEncounters(floor.getAbove()); break;
 				default:
@@ -135,9 +152,10 @@ public class GameGui extends Application{
 					
 					//Visually update position
 					human.setTranslateY(human.getTranslateY() - GameTile.TILE_DIMENSIONS);
+					flashlight.setTranslateY(flashlight.getTranslateY() - GameTile.TILE_DIMENSIONS);
 				}
 				break;
-			case A:
+			case LEFT:
 				switch(floor.getLeft()) {
 				case GameTile.WALL: floor.promptEncounters(floor.getLeft()); break;
 				default:
@@ -145,9 +163,10 @@ public class GameGui extends Application{
 					floor.promptEncounters(floor.getLeft());
 					floor.moveLeft();
 					human.setTranslateX(human.getTranslateX() - GameTile.TILE_DIMENSIONS);
+					flashlight.setTranslateX(flashlight.getTranslateX() - GameTile.TILE_DIMENSIONS);
 				}
 				break;
-			case S:
+			case DOWN:
 				switch(floor.getBelow()) {
 				case GameTile.WALL: floor.promptEncounters(floor.getBelow()); break;
 				default:
@@ -155,9 +174,10 @@ public class GameGui extends Application{
 					floor.promptEncounters(floor.getBelow());
 					floor.moveDown();
 					human.setTranslateY(human.getTranslateY() + GameTile.TILE_DIMENSIONS);
+					flashlight.setTranslateY(flashlight.getTranslateY() + GameTile.TILE_DIMENSIONS);
 				}
 				break;
-			case D:
+			case RIGHT:
 				switch(floor.getRight()) {
 				case GameTile.WALL: floor.promptEncounters(floor.getRight()); break;
 				default:
@@ -165,6 +185,7 @@ public class GameGui extends Application{
 					floor.promptEncounters(floor.getRight());
 					floor.moveRight();
 					human.setTranslateX(human.getTranslateX() + GameTile.TILE_DIMENSIONS);
+					flashlight.setTranslateX(flashlight.getTranslateX() + GameTile.TILE_DIMENSIONS);
 				}
 				break;
 			}
@@ -228,7 +249,7 @@ class Floor extends StackPane{
 		case GameTile.WALL: System.out.println("You encounter a wall."); break; 
 		case GameTile.ENEMY: System.out.println("e"); break; //fill in
 		case GameTile.ITEM: System.out.println("i"); break; //fill in
-		case GameTile.EXIT: System.out.println("exit"); break; //fill in
+//		case GameTile.EXIT: System.out.println("exit"); break; //fill in
 		}
 	}
 
@@ -271,7 +292,7 @@ class Floor extends StackPane{
 		case GameTile.ENEMY: return GameTile.ENEMY;
 		case GameTile.ITEM: return GameTile.ITEM;
 		case GameTile.EMPTY: return GameTile.EMPTY;
-		case GameTile.EXIT: return GameTile.EXIT;
+//		case GameTile.EXIT: return GameTile.EXIT;
 		default: return -1; //Unreachable code
 		}
 	}
@@ -281,7 +302,7 @@ class Floor extends StackPane{
 		case GameTile.ENEMY: return GameTile.ENEMY;
 		case GameTile.ITEM: return GameTile.ITEM;
 		case GameTile.EMPTY: return GameTile.EMPTY;
-		case GameTile.EXIT: return GameTile.EXIT;
+//		case GameTile.EXIT: return GameTile.EXIT;
 		default: return -1; //Unreachable code
 		}
 	}
@@ -291,7 +312,7 @@ class Floor extends StackPane{
 		case GameTile.ENEMY: return GameTile.ENEMY;
 		case GameTile.ITEM: return GameTile.ITEM;
 		case GameTile.EMPTY: return GameTile.EMPTY;
-		case GameTile.EXIT: return GameTile.EXIT;
+//		case GameTile.EXIT: return GameTile.EXIT;
 		default: return -1; //Unreachable code
 		}
 	}
@@ -301,7 +322,7 @@ class Floor extends StackPane{
 		case GameTile.ENEMY: return GameTile.ENEMY;
 		case GameTile.ITEM: return GameTile.ITEM;
 		case GameTile.EMPTY: return GameTile.EMPTY;
-		case GameTile.EXIT: return GameTile.EXIT;
+//		case GameTile.EXIT: return GameTile.EXIT;
 		default: return -1; //Unreachable code
 		}
 	}

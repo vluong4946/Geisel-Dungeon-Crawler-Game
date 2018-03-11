@@ -27,15 +27,25 @@ public class GameGui extends Application{
 	public static final int NUM_TILES_PER_SIDE = 
 			GRID_PANE_SIZE / GameTile.TILE_DIMENSIONS; //600/20 = 30
 	
-	public Node human;
+	private HBox topHBox;
+	private GridPane tilesGridPane;
+	private Text floorNumText;
+	private BorderPane borderPane;
+	private Scene scene;
+	private Node human;
+	//private GridPane humanGridPane;
+	
+	private Floor floor;
+	private int floorNum = 1;
+	
 	public static final int ROW_START = 4;
 	public static final int COL_START = 4;
 	
 	//Methods
 	public void start(Stage primaryStage) {
 		
-		createGui(primaryStage, 1); //1 is temporary for testing
-		Floor floor = new Floor(Floor.FIRST_FLOOR);
+		createGui(primaryStage); //1 is temporary for testing
+		
 		
 		/** BELOW IS FUTURE GAME LOOP TO GO THROUGH THE FLOORS **/
 		//for(int floorNum = Floor.FIRST_FLOOR; floorNum <= Floor.LAST_FLOOR; floorNum++) {
@@ -49,25 +59,25 @@ public class GameGui extends Application{
 	 * This method will create the GUI for each floor depending on the
 	 * floor number the player is currently on. 
 	 */
-	private void createGui(Stage primaryStage, int floorNum) {
+	private void createGui(Stage primaryStage) {
 		//Set primaryStage attributes
 		primaryStage.setTitle(P_STAGE_TITLE);
-		primaryStage.setWidth(P_STAGE_SIZE);
-		primaryStage.setHeight(P_STAGE_SIZE);
+		primaryStage.setMaxWidth(P_STAGE_SIZE);
+		primaryStage.setMaxHeight(P_STAGE_SIZE);
 		
 		//Create HBox to hold header for floor #
-		HBox topHBox = new HBox(SPACE_BETWEEN_HBOX_NODES);
+		topHBox = new HBox(SPACE_BETWEEN_HBOX_NODES);
 		topHBox.setPadding(new Insets(INSETS_SPACING_FOR_HBOX, INSETS_SPACING_FOR_HBOX
 				,INSETS_SPACING_FOR_HBOX, INSETS_SPACING_FOR_HBOX));
 		topHBox.setStyle("-fx-background-color: lavender");
 		
 		//Create floor# text and put it in topHBox
-		Text floorNumText = new Text("Floor: " + floorNum);
+		floorNumText = new Text("Floor: " + floorNum);
 		topHBox.getChildren().add(floorNumText);
 		topHBox.setAlignment(Pos.CENTER);
 		
 		//Create GridPane to store empty GameTile objects to be overrided later on
-		GridPane tilesGridPane = new GridPane();
+		tilesGridPane = new GridPane();
 		tilesGridPane.setPrefSize(GRID_PANE_SIZE, GRID_PANE_SIZE);
 		tilesGridPane.setAlignment(Pos.CENTER);
 		//Stores a total of 900 tiles in tilesGridPane (30 x 30)
@@ -81,13 +91,11 @@ public class GameGui extends Application{
 		human = createHuman();
 		tilesGridPane.add(human, COL_START, ROW_START);
 		
-		
-		
 		//Create borderPane and scene
-		BorderPane borderPane = new BorderPane();
+		borderPane = new BorderPane();
 		borderPane.setTop(topHBox);
-		borderPane.setCenter(tilesGridPane);	
-		Scene scene = new Scene(borderPane);
+		borderPane.setCenter(tilesGridPane);
+		scene = new Scene(borderPane);
 		primaryStage.setScene(scene);
 		
 		
@@ -95,27 +103,86 @@ public class GameGui extends Application{
 		primaryStage.show();
 		
 		//From now on, player controls the human node. 
-		scene.setOnKeyPressed(key -> {
-			switch(key.getCode()) {
-			case W: human.setTranslateY(human.getTranslateY() - GameTile.TILE_DIMENSIONS);
-			
-			break;
-			}
-		});
+		allowUserInput(scene, human, floorNum);
+		
 	}
 	
 	/*
 	 * Method: createHuman
 	 * Creates a Node human to navigate the playing field. 
 	 */
-	private Node createHuman() {
-		Rectangle human = new Rectangle(GameTile.TILE_DIMENSIONS, 
+	public Node createHuman() {
+		human = new Rectangle(GameTile.TILE_DIMENSIONS, 
 				GameTile.TILE_DIMENSIONS, Color.LIGHTGREEN);
 		return human;
 	}
+	
+	public void allowUserInput(Scene scene, Node human, int floorNum) {
+		//Create floor object
+		floor = new Floor(floorNum);
+				
+		//Accept user input
+		scene.setOnKeyPressed(key -> {
+			switch(key.getCode()) {
+			//Probably break these up into methods. 
+			case W: 
+				switch(floor.getAbove()) {
+				case GameTile.WALL: floor.promptEncounters(floor.getAbove()); break;
+				default:
+					CoverPreviousTile();
+					floor.promptEncounters(floor.getAbove());
+					floor.moveUp();
+					
+					//Visually update position
+					human.setTranslateY(human.getTranslateY() - GameTile.TILE_DIMENSIONS);
+				}
+				break;
+			case A:
+				switch(floor.getLeft()) {
+				case GameTile.WALL: floor.promptEncounters(floor.getLeft()); break;
+				default:
+					CoverPreviousTile();
+					floor.promptEncounters(floor.getLeft());
+					floor.moveLeft();
+					human.setTranslateX(human.getTranslateX() - GameTile.TILE_DIMENSIONS);
+				}
+				break;
+			case S:
+				switch(floor.getBelow()) {
+				case GameTile.WALL: floor.promptEncounters(floor.getBelow()); break;
+				default:
+					CoverPreviousTile();
+					floor.promptEncounters(floor.getBelow());
+					floor.moveDown();
+					human.setTranslateY(human.getTranslateY() + GameTile.TILE_DIMENSIONS);
+				}
+				break;
+			case D:
+				switch(floor.getRight()) {
+				case GameTile.WALL: floor.promptEncounters(floor.getRight()); break;
+				default:
+					CoverPreviousTile();
+					floor.promptEncounters(floor.getRight());
+					floor.moveRight();
+					human.setTranslateX(human.getTranslateX() + GameTile.TILE_DIMENSIONS);
+				}
+				break;
+			}
+		});		
+	}
+	
+	/*
+	 * Method: CoverPreviousTile
+	 * Places a "snow" colored rectangle on the gridpane to visually cover up
+	 * encountered nodes. 
+	 */
+	public void CoverPreviousTile() {
+		//tilesGridPane.getChildren().remove(tilesGridPane.);
+		//tilesGridPane.add(
+				//new Rectangle(GameTile.TILE_DIMENSIONS, GameTile.TILE_DIMENSIONS, Color.SNOW), 
+					//floor.playerPosition[1], floor.playerPosition[0]);
+	}
 
-	
-	
 
 }
 
@@ -126,9 +193,10 @@ class Floor extends StackPane{
 	public static final int FIRST_FLOOR = 1;
 	public static final int LAST_FLOOR = 8;
 	
-	private int[][] floorArray;
+	public int[][] floorArray;
 	private static int[][] wallsArray;
 	
+	public int[] playerPosition = {GameGui.ROW_START, GameGui.COL_START};
 	
 	private static final int FLOOR_ARRAY_SIZE = GameGui.NUM_TILES_PER_SIDE;
 
@@ -138,14 +206,105 @@ class Floor extends StackPane{
 	 */
 	public Floor(int floorNum) {
 		this.floorNum = floorNum;
+		
+		//Creating array for floor and transferring the tiles information to it. 
 		this.floorArray = 
 				new int[GameGui.NUM_TILES_PER_SIDE][GameGui.NUM_TILES_PER_SIDE];
 		this.floorArray = copyArray(floorArray, GameTile.tileStatus);
 		
+		
+		
+		//Prints floorArray. Used for testing. Will be removed. 
 		testPrintArray(floorArray);
 		
 	}
+	/*
+	 * Method: promptEncounters
+	 * Prompts the appropriate events depending on what type node is encountered
+	 * by the player. 
+	 */
+	public void promptEncounters(int nodeEncountered) {
+		switch(nodeEncountered) {
+		case GameTile.WALL: System.out.println("You encounter a wall."); break; 
+		case GameTile.ENEMY: System.out.println("e"); break; //fill in
+		case GameTile.ITEM: System.out.println("i"); break; //fill in
+		case GameTile.EXIT: System.out.println("exit"); break; //fill in
+		}
+	}
+
+	/*
+	 * Method: move__
+	 * Activated to move in that specific direction. 
+	 * This method replaces previous space with empty, moves player in
+	 * the array, and updates playerPosition. 
+	 */
+	public void moveUp() {
+		floorArray[playerPosition[0]][playerPosition[1]] = GameTile.EMPTY;
+		floorArray[playerPosition[0] - 1][playerPosition[1]] = GameTile.PLAYER;
+		playerPosition[0] -= 1;
+	}
+	public void moveLeft() {
+		floorArray[playerPosition[0]][playerPosition[1]] = GameTile.EMPTY;
+		floorArray[playerPosition[0]][playerPosition[1] - 1] = GameTile.PLAYER;
+		playerPosition[1] -= 1;
+	}
+	public void moveDown() {
+		floorArray[playerPosition[0]][playerPosition[1]] = GameTile.EMPTY;
+		floorArray[playerPosition[0] + 1][playerPosition[1]] = GameTile.PLAYER;
+		playerPosition[0] += 1;
+	}
+	public void moveRight() {
+		floorArray[playerPosition[0]][playerPosition[1]] = GameTile.EMPTY;
+		floorArray[playerPosition[0]][playerPosition[1] + 1] = GameTile.PLAYER;
+		playerPosition[1] += 1;
+	}
 	
+	
+	/*
+	 * Method: get___
+	 * The following four getter methods return an int corresponding to the 
+	 * type of node in the direction the player chooses. 
+	 */
+	public int getAbove() {
+		switch(floorArray[playerPosition[0] - 1][playerPosition[1]]) {
+		case GameTile.WALL: return GameTile.WALL; 
+		case GameTile.ENEMY: return GameTile.ENEMY;
+		case GameTile.ITEM: return GameTile.ITEM;
+		case GameTile.EMPTY: return GameTile.EMPTY;
+		case GameTile.EXIT: return GameTile.EXIT;
+		default: return -1; //Unreachable code
+		}
+	}
+	public int getBelow() {
+		switch(floorArray[playerPosition[0] + 1][playerPosition[1]]) {
+		case GameTile.WALL: return GameTile.WALL; 
+		case GameTile.ENEMY: return GameTile.ENEMY;
+		case GameTile.ITEM: return GameTile.ITEM;
+		case GameTile.EMPTY: return GameTile.EMPTY;
+		case GameTile.EXIT: return GameTile.EXIT;
+		default: return -1; //Unreachable code
+		}
+	}
+	public int getLeft() {
+		switch(floorArray[playerPosition[0]][playerPosition[1] - 1]) {
+		case GameTile.WALL: return GameTile.WALL; 
+		case GameTile.ENEMY: return GameTile.ENEMY;
+		case GameTile.ITEM: return GameTile.ITEM;
+		case GameTile.EMPTY: return GameTile.EMPTY;
+		case GameTile.EXIT: return GameTile.EXIT;
+		default: return -1; //Unreachable code
+		}
+	}
+	public int getRight() {
+		switch(floorArray[playerPosition[0]][playerPosition[1] + 1]) {
+		case GameTile.WALL: return GameTile.WALL; 
+		case GameTile.ENEMY: return GameTile.ENEMY;
+		case GameTile.ITEM: return GameTile.ITEM;
+		case GameTile.EMPTY: return GameTile.EMPTY;
+		case GameTile.EXIT: return GameTile.EXIT;
+		default: return -1; //Unreachable code
+		}
+	}
 	
 	/*
 	 * Method: createFloorWalls
@@ -180,6 +339,15 @@ class Floor extends StackPane{
 		}
 		return a1;
 	}
+	/*
+	 * Method: printLine
+	 * Used for testing. Prints a line of - 's
+	 */
+	public static void printLine() {
+		for(int i = 0; i < 10; i++)
+			System.out.print("-");
+		System.out.println();
+	}
 	
 	/*
 	 * Method: testPrintArray
@@ -192,6 +360,7 @@ class Floor extends StackPane{
 			}
 			System.out.println();
 		}
+		printLine();
 	}
 	
 	

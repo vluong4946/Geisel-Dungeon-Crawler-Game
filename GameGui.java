@@ -173,7 +173,7 @@ public class GameGui extends Application{
 		//Display primaryStage
 		window.show(); 
 		
-		if(Floor.floorNum == 9)
+		if(Floor.floorNum == 8
 		{
 			System.out.println("floor num is 9");
 			System.out.println("Close the game");

@@ -9,14 +9,10 @@ import javafx.stage.*;
 import javafx.scene.text.*;
 import javafx.geometry.*;
 import java.util.Random;
-// Youngwoo Last Change 5:28am
-/*
-I edited lines 51-65 <= make a way to launch Opeing file
-			But don't worry! I made a returning route after login success
+import javafx.scene.control.Button;
+import javafx.scene.effect.BlurType;
+import javafx.scene.effect.DropShadow;
 
-I edited lines 75: public void createGui(). I need to change if it returns it.
-		   Because it doesnt receieve the primaryStage anymore, so I changed primaryStage to window
-*/
 public class GameGui extends Application{
 	public static void main(String[] args) {
 		Application.launch(args); //runs the start method
@@ -77,7 +73,48 @@ public class GameGui extends Application{
 			
 // 			createGui(window);
 	}
-//*****************************************************************
+	public void endingButton() {
+		
+			tilesGridPane.getChildren().clear();
+			stackPane.getChildren().clear();
+			//borderPane.getChildren().clear();
+			borderPane.setStyle("-fx-background-color: BLACK");
+
+			//stackPane
+			Button FinishBtn = new Button("THE END");
+			FinishBtn.setFont(Font.font("Press Start K", FontWeight.BOLD, 50));
+			FinishBtn.setTextFill(Color.BROWN);
+			FinishBtn.setStyle("-fx-background-color: transparent");
+			FinishBtn.setTranslateX(0);
+			FinishBtn.setTranslateY(-90);
+		    DropShadow dropShadow = new DropShadow(); 
+		    dropShadow.setBlurType(BlurType.GAUSSIAN); 
+		    dropShadow.setColor(Color.ROSYBROWN); 
+		    dropShadow.setHeight(8); 
+		    dropShadow.setWidth(5);
+		    dropShadow.setRadius(5); 
+		    
+		    dropShadow.setOffsetX(3); 
+		    dropShadow.setOffsetY(2); 
+		      
+		    dropShadow.setSpread(12);  
+
+		    FinishBtn.setEffect(dropShadow);  
+		    
+		    stackPane.getChildren().add(FinishBtn);
+//		    FinishBtn.setOnAction(event->{
+//				try {
+//					stackPane.getChildren().clear();
+//					borderPane.getChildren().clear();
+//					stackPane.getChildren().clear();
+//					Account.Ending(new GridPane());
+//				} catch (Exception e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				}		
+//			});
+
+	}
 	/*
 	 * Method: createGui
 	 * This method will create the GUI for each floor depending on the
@@ -130,12 +167,18 @@ public class GameGui extends Application{
 		borderPane.setCenter(stackPane);
 		borderPane.setTop(topHBox);
 		scene = new Scene(borderPane);
-		window.setScene(scene);  //  Youngwoo Changed it
+		window.setScene(scene);
 		
 		
 		//Display primaryStage
-		window.show();  //  Youngwoo Changed it
+		window.show(); 
 		
+		if(Floor.floorNum == 9)
+		{
+			System.out.println("floor num is 9");
+			System.out.println("Close the game");
+			endingButton();
+		}
 		//From now on, player controls the human node. 
 		allowUserInput(scene, human, Floor.floorNum);
 		

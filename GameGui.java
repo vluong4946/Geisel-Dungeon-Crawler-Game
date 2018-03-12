@@ -2,17 +2,21 @@ import javafx.application.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.*;
-import javafx.scene.control.Button;
-import javafx.scene.effect.BlurType;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.*;
 import javafx.scene.shape.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
 import javafx.scene.text.*;
 import javafx.geometry.*;
+import java.util.Random;
+// Youngwoo Last Change 5:28am
+/*
+I edited lines 51-65 <= make a way to launch Opeing file
+			But don't worry! I made a returning route after login success
 
-
+I edited lines 75: public void createGui(). I need to change if it returns it.
+		   Because it doesnt receieve the primaryStage anymore, so I changed primaryStage to window
+*/
 public class GameGui extends Application{
 	public static void main(String[] args) {
 		Application.launch(args); //runs the start method
@@ -44,68 +48,36 @@ public class GameGui extends Application{
 	public static Stage window;
 	public static Scene scene;
 	
+	private static final Random RNG = new Random();
+	
 	private Floor floor;
 	
 	private static final String PLAYER_PICTURE = "Player.png";
 	
+// ***************************************************************	
 	public void start(Stage primaryStage) {
+			window = primaryStage;
+			if(!Opening.accountCreated) {
+				
+				Opening open = new Opening();
+				Opening.accountCreated = true;
+				try {
+					open.start(new Stage());
+				    } catch (Exception e) {
+						// TODO Auto-generated catch block
+					e.printStackTrace();
+				     }
+			}
+			else if(Floor.floorNum > Floor.LAST_FLOOR) {
+				
+			}
+			else {
+				createGui();
+			}
 			
-			Opening open = new Opening();
-
-		try {
-			open.start(new Stage());
-			
-		    } catch (Exception e) {
-				// TODO Auto-generated catch block
-			e.printStackTrace();
-		     }
-		window =  primaryStage;
-
 // 			createGui(window);
 	}
-	
-	public void endingButton() {
-		
-			tilesGridPane.getChildren().clear();
-			stackPane.getChildren().clear();
-			//borderPane.getChildren().clear();
-			borderPane.setStyle("-fx-background-color: BLACK");
-
-			//stackPane
-			Button FinishBtn = new Button("THE END");
-			FinishBtn.setFont(Font.font("Press Start K", FontWeight.BOLD, 50));
-			FinishBtn.setTextFill(Color.BROWN);
-			FinishBtn.setStyle("-fx-background-color: transparent");
-			FinishBtn.setTranslateX(0);
-			FinishBtn.setTranslateY(-90);
-		    DropShadow dropShadow = new DropShadow(); 
-		    dropShadow.setBlurType(BlurType.GAUSSIAN); 
-		    dropShadow.setColor(Color.ROSYBROWN); 
-		    dropShadow.setHeight(8); 
-		    dropShadow.setWidth(5);
-		    dropShadow.setRadius(5); 
-		    
-		    dropShadow.setOffsetX(3); 
-		    dropShadow.setOffsetY(2); 
-		      
-		    dropShadow.setSpread(12);  
-
-		    FinishBtn.setEffect(dropShadow);  
-		    
-		    stackPane.getChildren().add(FinishBtn);
-//		    FinishBtn.setOnAction(event->{
-//				try {
-//					stackPane.getChildren().clear();
-//					borderPane.getChildren().clear();
-//					stackPane.getChildren().clear();
-//					Account.Ending(new GridPane());
-//				} catch (Exception e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				}		
-//			});
-
-	}
+//*****************************************************************
 	/*
 	 * Method: createGui
 	 * This method will create the GUI for each floor depending on the
@@ -164,16 +136,9 @@ public class GameGui extends Application{
 		//Display primaryStage
 		window.show();  //  Youngwoo Changed it
 		
-		if(Floor.floorNum == 8 || Player.getHealth() == 0)
-		{
-			System.out.println("floor num is 8 or health is 0");
-			System.out.println("Close the game");
-			endingButton();
-		}
 		//From now on, player controls the human node. 
 		allowUserInput(scene, human, Floor.floorNum);
 		
-			
 	}
 	/*
 	 * Method: createGameArray
@@ -204,6 +169,7 @@ public class GameGui extends Application{
 		topHBox.setAlignment(Pos.TOP_LEFT);
 	}
 	
+	
 	/*
 	 * Method: determineNotificationText
 	 * Accepts the current floor # as a parameter and outputs a special
@@ -220,6 +186,8 @@ public class GameGui extends Application{
 					+ "Audrey's Coffee Shop in sight.";
 		case 8: 
 			return "Defeat the boss!";
+		case 9:
+			return "You escape Geisel Library! Congratulations!";
 		default: return "You ascend to the next floor...";
 		}
 	}
@@ -337,12 +305,15 @@ public class GameGui extends Application{
 			break; 
 		case GameTile.ENEMY: 
 			System.out.println("Enemy");
-			window.setScene(BattleScene.battleStart()); 
+			Minion enemy = 
+					new Minion(Monster.FLOOR_DIFFICULTY, isBoss(Monster.FLOOR_DIFFICULTY));
+			window.setScene(BattleScene.battleStart(Account.player, enemy)); 
 			setNotificationText("You encountered an enemy!");
 			break; //fill in
 		case GameTile.ITEM: 
 			System.out.println("Item");
-			setNotificationText("You pick up an item.");
+			setNotificationText("You pick up a coffee! :D");
+			Player.coffeeAmount += 1;
 			break; //fill in
 		case GameTile.EXIT: 
 			System.out.println("Exit");
@@ -364,14 +335,22 @@ public class GameGui extends Application{
 		tilesGridPane.getChildren()
 			.remove(tiles[floor.playerPosition[0]][floor.playerPosition[1]]);
 	}
+	
 	/*
-	 * Method: setIsFloorComplete
-	 * Setter method to set boolean isFloorComplete. Called with parameter
-	 * true when player reaches a floor exit. 
+	 * Method: isBoss
+	 * Determines whether an encountered enemy is a boss based on chance. 
+	 * The chance increases as higher floors. 
 	 */
-	//public void setIsFloorComplete(boolean isAtExit) {
-	//	floor.isFloorComplete = isAtExit;
-	//}
+	public boolean isBoss(int floorDifficulty) {
+		//If boss threshhold level is exceeded, 1/5 chance for boss each time encounter enemy. 
+		if(floorDifficulty >= Monster.DIFFICULTY_FOR_BOSSES_TO_SPAWN) {
+			switch(RNG.nextInt(5)) {
+			case 0: return true;
+			default: return false;
+			}
+		}
+		return false;
+	}
 	
 	/*
 	 * Method: checkIfFloorComplete
@@ -379,10 +358,8 @@ public class GameGui extends Application{
 	 */
 	public void checkIfFloorComplete() {
 		if(floor.isFloorComplete) {
-
 			floor.isFloorComplete = false;
-			createGui();
-			
+			start(window);
 		}
 	}
 
@@ -549,7 +526,7 @@ class Floor extends StackPane{
 			System.out.print("-");
 		System.out.println();
 	}
-
+	
 	
 	//Getters and Setters
 	//public int getFloorNum() {

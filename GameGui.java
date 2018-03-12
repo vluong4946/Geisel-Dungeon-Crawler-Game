@@ -9,7 +9,14 @@ import javafx.stage.*;
 import javafx.scene.text.*;
 import javafx.geometry.*;
 
+// Youngwoo Last Change 5:28am
+/*
+I edited lines 51-65 <= make a way to launch Opeing file
+			But don't worry! I made a returning route after login success
 
+I edited lines 75: public void createGui(). I need to change if it returns it.
+		   Because it doesnt receieve the primaryStage anymore, so I changed primaryStage to window
+*/
 public class GameGui extends Application{
 	public static void main(String[] args) {
 		Application.launch(args); //runs the start method
@@ -45,22 +52,32 @@ public class GameGui extends Application{
 	
 	private static final String PLAYER_PICTURE = "Player.png";
 	
-	
+// ***************************************************************	
 	public void start(Stage primaryStage) {
 			window = primaryStage;
-			createGui(window);
+			
+			Opening open = new Opening();
+			
+		try {
+			open.start(new Stage());
+		    } catch (Exception e) {
+				// TODO Auto-generated catch block
+			e.printStackTrace();
+		     }
+// 			createGui(window);
 	}
+//*****************************************************************
 	/*
 	 * Method: createGui
 	 * This method will create the GUI for each floor depending on the
 	 * floor number the player is currently on. 
 	 */
-	private void createGui(Stage primaryStage) {
+	public void createGui() {
 		//Set primaryStage attributes
 		System.out.println(Floor.floorNum);
-		primaryStage.setTitle(P_STAGE_TITLE);
-		primaryStage.setMaxWidth(P_STAGE_SIZE);
-		primaryStage.setMaxHeight(P_STAGE_SIZE);
+		window.setTitle(P_STAGE_TITLE); //  Youngwoo Changed it
+		window.setMaxWidth(P_STAGE_SIZE);  //  Youngwoo Changed it
+		window.setMaxHeight(P_STAGE_SIZE); //  Youngwoo Changed it
 		
 		//Create HBox to hold header for floor #
 		topHBox = new HBox(SPACE_BETWEEN_HBOX_NODES);
@@ -102,11 +119,11 @@ public class GameGui extends Application{
 		borderPane.setCenter(stackPane);
 		borderPane.setTop(topHBox);
 		scene = new Scene(borderPane);
-		primaryStage.setScene(scene);
+		window.setScene(scene);  //  Youngwoo Changed it
 		
 		
 		//Display primaryStage
-		primaryStage.show();
+		window.show();  //  Youngwoo Changed it
 		
 		//From now on, player controls the human node. 
 		allowUserInput(scene, human, Floor.floorNum);

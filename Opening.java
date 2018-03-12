@@ -16,19 +16,36 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.effect.*;
 
-//import java.awt.BorderLayout;
-//import javax.swing.*;
+/*****************************************************************
+ * It is definitely made for Opening Screen. 
+ * It shows the title with our group name.
+ * And there are four buttons:
+ * start New Game, Load a Game, See the Rank, Quit the Game
+ * and I made event handler for each buttons which are in Account
+ * ***************************************************************
+ *  What I GONNA DO
+ *  1. I think if there is any back ground or something else, it would be coool
+ *  2. Comment all functions
+ *  
+ *  As you guys know, my English is not fluence as u
+ *  so if the word is weird, change it and tell me
+ */
 
 public class Opening extends Application {
 
-		private static Account account;
+		private static Account account; // yes account of course
+		
+		/*
+		 * If you want to call the Opening java file, call this
+		 */
 	public static void Opening(Stage primaryStage) throws Exception {
-		GridPane pane = new GridPane();
-		GridPane pane1 = new GridPane();
+		
+		GridPane pane = new GridPane(); // It is first page which contains title, and buttons
+		GridPane pane1 = new GridPane(); // It is Gridpane which gonna be called by 
 
 		Scene scene,scene1;
 		
-		account = new Account();
+		account = new Account(); 
 
 		primaryStage.centerOnScreen();
 		primaryStage.show();
@@ -39,7 +56,7 @@ public class Opening extends Application {
 	    primaryStage.setScene(scene);
 	    primaryStage.setTitle("OpeningPage"); // Set the stage title
 	    
-	    
+	    // Title
 	    Label label = new Label("Geisel Library Crawl");
 	    label.setTextFill(Color.BROWN);
 	    label.setFont(Font.font("Press Start K", FontWeight.BOLD, 50));
@@ -66,6 +83,7 @@ public class Opening extends Application {
 	    
  	    pane.getChildren().add(label);
 	    
+ 	    // buttons
 		Button bt = new Button();
 		Button load = new Button();
 		Button rank = new Button();
@@ -130,9 +148,15 @@ public class Opening extends Application {
 
 		pane.getChildren().addAll(copyRight,btlabel,loadlabel, ranklabel,quitlabel);
 		pane.getChildren().addAll(load,bt,rank,quit);
+		
 	    pane.setStyle("-fx-background-color: black;");
-	    
 	    pane1.setStyle("-fx-background-color: black;");
+	    
+	    // event handlers
+	    // As you see there are three event handler per each button
+	    // because i want to change the screen whether the mouse on or not on the button(not sure u guys can understand my word:(!)
+	    
+	    // making new account buttons
 	    bt.setOnMouseMoved((effect)->{
 	    	btlabel.setTextFill(Color.BROWN);
 	    });
@@ -152,6 +176,7 @@ public class Opening extends Application {
 				}
 			});
 	    
+	    //loading the save file button
 	    load.setOnMouseMoved((effect)->{
 	    	loadlabel.setTextFill(Color.BROWN);
 	    });
@@ -171,6 +196,8 @@ public class Opening extends Application {
 				e1.printStackTrace();
 			}
 	    });
+	    
+	    // see the rank button
 	    rank.setOnMouseMoved((effect)->{
 	    	ranklabel.setTextFill(Color.BROWN);
 	    });
@@ -186,6 +213,8 @@ public class Opening extends Application {
 				e1.printStackTrace();
 			}
 	    });
+	    
+	    // quit the game button
 	    quit.setOnMouseMoved((effect)->{
 	    	quitlabel.setTextFill(Color.BROWN);
 	    });
@@ -203,6 +232,7 @@ public class Opening extends Application {
 	    });
 	}
 	
+	// It is made for testing. Therefore, u can test from here
 	public void start(Stage primaryStage) throws Exception {
 		GridPane pane = new GridPane();
 		GridPane pane1 = new GridPane();

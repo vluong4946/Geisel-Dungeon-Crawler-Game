@@ -45,7 +45,6 @@ public class GameTile extends StackPane{
 	 * and status as a wall, empty, enemy, or item. 
 	 */
 	public GameTile(int floorNum, int row, int col){
-		
 		if(row == Floor.ROW_START && col == Floor.COL_START) {
 			tileValue = PLAYER;
 		}

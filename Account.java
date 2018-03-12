@@ -4,6 +4,7 @@
 //**********************************
 // <Last change>
 //  3/12/2018 4:27am - I edited ending part; I put our name!
+//  3/12/2018 5:38am - I added line 593
 /*
 This java file does
 1. making new accounts -> MakingNewAccount(pane)
@@ -54,17 +55,17 @@ import java.io.*;
 public class Account {
 
 	private static  File file = new File("Account.txt");
-
-	Player player = new Player();
-	String playerName = "";
-	String pw = "";
-	String major = "";
-	String bestScore = "0";
+	
+	private String playerName = "";
+	private String pw = "";
+	public static String major = "";
+	private String bestScore = "0";
 	int bestNum = 0;
 	static int option;
 	static int numofPpl = 100;
 	String[][] customers = new String[numofPpl][4];
 	boolean success = false;
+	public static Player player;
 
 	
 	public Account() {
@@ -591,6 +592,7 @@ public class Account {
 		start.setOnAction(event->{
 			try {
 				pane1.getScene().getWindow().hide();
+				player = new Player(Account.major);
 				player.Player(major);
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block

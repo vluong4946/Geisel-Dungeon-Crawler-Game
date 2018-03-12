@@ -21,8 +21,14 @@ import java.util.ArrayList;
  */
 public class Player{
 	//fields for a player instance
-	private int health = 100; // first health is 100; and if the health changes, use changeHealth(int potion). ( if player damaged just receive negative number)
+	private static final int STARTING_HEALTH = 100;
+	private static final int STARTING_ENERGY = 100;
+	public int health; // first health is 100; and if the health changes, use changeHealth(int potion). ( if player damaged just receive negative number)
+	public int energy;
+	public static int coffeeAmount;
 	public int[] attackValue = new int[5]; // attackValue is different depending on the major
+	
+	public Player player;
 	/*
 	 * attackValue[0] = computer science
 	 * attackValue[1] = mathematics
@@ -34,19 +40,22 @@ public class Player{
 	private ArrayList<String> weaponInven = new ArrayList<String>(9); // it is an inventory oof weapons
 	private int itemNumber = -1;
 	private int MAXITEMSPACE = 20;
-	private String major; // major changes in Player(String maj) 
-	private int score = 0; // initial score is 0. If you want to change it -> ascendingScore
+	public String major; // major changes in Player(String maj) 
+	public static int score; // initial score is 0. If you want to change it -> ascendingScore
 						   // 					 If you want to get the score -> getScore();
 	//inventory of objects
 	
 	//constructors
-	Player(){
-		this.health = 100;
-		score = 0;
+	Player(String maj){
+		this.health = STARTING_HEALTH;
+		this.energy = STARTING_ENERGY;
+		this.score = 0;
+		coffeeAmount = 0;
 	}
 
 	GameGui gui = new GameGui();
 	// It is made for the button action after the login success
+	// from victor: this is pointless
 	public void Player(String maj) {
 		this.major = maj;
 		gui.createGui();

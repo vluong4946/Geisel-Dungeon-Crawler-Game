@@ -31,7 +31,8 @@ public class GameGui extends Application{
 	private GridPane tilesGridPane;
 	private BorderPane borderPane;
 	private StackPane stackPane;
-	private Text floorNumText;
+	private Text floorNumHeader;
+	private Text notificationHeader;
 	private Node human;
 	private Node flashlight;
 	private static final int FL_RADIUS = 200;
@@ -78,10 +79,16 @@ public class GameGui extends Application{
 				,INSETS_SPACING_FOR_HBOX, INSETS_SPACING_FOR_HBOX));
 		topHBox.setStyle("-fx-background-color: lavender");
 		
-		//Create floor# text and put it in topHBox
-		floorNumText = new Text("Floor: " + Floor.floorNum);
-		topHBox.getChildren().add(floorNumText);
+		//Create floor# and notification text and put it in topHBox
+		floorNumHeader = new Text("Floor: " + Floor.floorNum);
+		topHBox.getChildren().add(floorNumHeader);
 		topHBox.setAlignment(Pos.TOP_LEFT);
+		System.out.println(Floor.floorNum);
+		setNotificationText("You ascend to the next floor!");
+		if(Floor.floorNum == Floor.FIRST_FLOOR)
+			setNotificationText("After sleeping the night in Geisel, you awaken "
+					+ "to find hostile exams, \nhomework assignments and essays after you. "
+						+ "\nFight your way to the top to get that A!!!!");
 		
 		//Create GridPane to store empty GameTile objects to be overrided later on
 		tilesGridPane = new GridPane();
@@ -135,6 +142,21 @@ public class GameGui extends Application{
 			}
 		}
 	}
+	
+	/*
+	 * Method: setNotificationText
+	 * Accepts a String parameter and sets outputs it following the
+	 * notificationHeader at the top of the GUI. 
+	 */
+	public void setNotificationText(String notification) {
+		if(topHBox.getChildren().contains(notificationHeader)) {
+			topHBox.getChildren().remove(notificationHeader);
+		}
+		notificationHeader = new Text(notification);
+		topHBox.getChildren().add(notificationHeader);
+		topHBox.setAlignment(Pos.TOP_LEFT);
+	}
+	
 	
 	/*
 	 * Method: createHuman
@@ -235,21 +257,29 @@ public class GameGui extends Application{
 			}
 		});	
 	}
-	
+	/*
+	 * Method: promptEncounters
+	 * Prompts the appropriate events depending on what type node is encountered
+	 * by the player. Prints the appropriate notifications to console and GUI. 
+	 */
 	public void promptEncounters(int nodeEncountered) {
 		switch(nodeEncountered) {
 		case GameTile.WALL: 
-			System.out.println("You encounter a wall."); 
+			System.out.println("Wall"); 
+			setNotificationText("You encounter a wall.");
 			break; 
 		case GameTile.ENEMY: 
-			System.out.println("e");
+			System.out.println("Enemy");
 			window.setScene(BattleScene.battleStart()); 
+			setNotificationText("You encountered an enemy!");
 			break; //fill in
 		case GameTile.ITEM: 
-			System.out.println("i"); 
+			System.out.println("Item");
+			setNotificationText("You pick up an item.");
 			break; //fill in
 		case GameTile.EXIT: 
-			System.out.println("exit");
+			System.out.println("Exit");
+			setNotificationText("You ascend to the next floor!");
 			//setIsFloorComplete(true);
 			Floor.floorNum++;
 			floor.isFloorComplete = true;
@@ -323,11 +353,7 @@ class Floor extends StackPane{
 		playerPosition[0] = ROW_START;
 		playerPosition[1] = COL_START;
 	}
-	/*
-	 * Method: promptEncounters
-	 * Prompts the appropriate events depending on what type node is encountered
-	 * by the player. 
-	 */
+	
 	
 
 	/*

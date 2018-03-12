@@ -2,7 +2,6 @@
 Youngwoo Last Change
  I edited Line 48 to add 	GameGui gui = new GameGui();
  I edited Line 51 to add		gui.createGui();
-
 It gonna help to go back to gameGui!
 */
 
@@ -20,7 +19,7 @@ import java.util.ArrayList;
  * Its features are still not present in the game. 
  *
  */
-public class PlayerTest extends testmain_toplayer{
+public class Player{
 	//fields for a player instance
 	private int health = 100; // first health is 100; and if the health changes, use changeHealth(int potion). ( if player damaged just receive negative number)
 	public int[] attackValue = new int[5]; // attackValue is different depending on the major
@@ -35,20 +34,20 @@ public class PlayerTest extends testmain_toplayer{
 	private ArrayList<String> weaponInven = new ArrayList<String>(9); // it is an inventory oof weapons
 	private int itemNumber = -1;
 	private int MAXITEMSPACE = 20;
-	private String major; // major changes in PlayerTest(String maj) 
+	private String major; // major changes in Player(String maj) 
 	private int score = 0; // initial score is 0. If you want to change it -> ascendingScore
 						   // 					 If you want to get the score -> getScore();
 	//inventory of objects
 	
 	//constructors
-	PlayerTest(){
+	Player(){
 		this.health = 100;
 		score = 0;
 	}
 
 	GameGui gui = new GameGui();
 	// It is made for the button action after the login success
-	public void PlayerTest(String maj) {
+	public void Player(String maj) {
 		this.major = maj;
 		gui.createGui();
 	}
@@ -121,14 +120,14 @@ public class PlayerTest extends testmain_toplayer{
 	}
 	
 	
-//	public PlayerTest() {
+//	public Player() {
 //		//ArrayList<Item> inventory = new ArrayList<>();
 //		Item[] item = new Item[MAXITEMSPACE];
 //		item[itemNumber] = new Item();
 //		item[itemNumber].Itemcreate();
 //	}
 //	
-//	public PlayerTest(int startingHealth, int[] inventory) { //more attributes to come
+//	public Player(int startingHealth, int[] inventory) { //more attributes to come
 //		this.health = startingHealth;
 //		this.inventory = inventory;
 //		
@@ -145,7 +144,7 @@ public class PlayerTest extends testmain_toplayer{
 	class Item{
 		
 		String itemName;
-		PlayerTest player;
+		Player player;
 		
 		public void Itemcreate() {
 			Random rng = new Random();
@@ -218,7 +217,7 @@ public class PlayerTest extends testmain_toplayer{
 				//Programing attack, Math Attack, Art Attack , histroy, pshycology in this order
 					public int[] weaponEncountered() {
 						
-//					PlayerTest player;
+//					Player player;
 
 					Random rng = new Random();
 					switch (rng.nextInt(6)) {

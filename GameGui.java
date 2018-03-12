@@ -40,26 +40,15 @@ public class GameGui extends Application{
 	
 	public static Stage window;
 	public static Scene scene;
-	//private GridPane humanGridPane;
 	
 	private Floor floor;
 	
-	//Pictures
 	private static final String PLAYER_PICTURE = "Player.png";
 	
-	//Methods
+	
 	public void start(Stage primaryStage) {
-		//do {
 			window = primaryStage;
 			createGui(window);
-			
-		//} while(floor.isFloorComplete);
-		
-		/** BELOW IS FUTURE GAME LOOP TO GO THROUGH THE FLOORS **/
-		//for(int floorNum = Floor.FIRST_FLOOR; floorNum <= Floor.LAST_FLOOR; floorNum++) {
-			//createGui(primaryStage); 
-		//}
-		
 	}
 	/*
 	 * Method: createGui
@@ -83,14 +72,9 @@ public class GameGui extends Application{
 		floorNumHeader = new Text("Floor: " + Floor.floorNum);
 		topHBox.getChildren().add(floorNumHeader);
 		topHBox.setAlignment(Pos.TOP_LEFT);
-		System.out.println(Floor.floorNum);
-		setNotificationText("You ascend to the next floor!");
-		if(Floor.floorNum == Floor.FIRST_FLOOR)
-			setNotificationText("After sleeping the night in Geisel, you awaken "
-					+ "to find hostile exams, \nhomework assignments and essays after you. "
-						+ "\nFight your way to the top to get that A!!!!");
+		setNotificationText(setSpecialNotificationText(Floor.floorNum));
 		
-		//Create GridPane to store empty GameTile objects to be overrided later on
+		//Create GridPane to store empty GameTile objects to be overided later on
 		tilesGridPane = new GridPane();
 		tilesGridPane.setPrefSize(GRID_PANE_SIZE, GRID_PANE_SIZE);
 		tilesGridPane.setAlignment(Pos.CENTER);
@@ -155,6 +139,26 @@ public class GameGui extends Application{
 		notificationHeader = new Text(notification);
 		topHBox.getChildren().add(notificationHeader);
 		topHBox.setAlignment(Pos.TOP_LEFT);
+	}
+	
+	/*
+	 * Method: determineNotificationText
+	 * Accepts the current floor # as a parameter and outputs a special
+	 * notification for that floor, if any. 
+	 */
+	public String setSpecialNotificationText(int floorNum) {
+		switch(floorNum) {
+		case 1: 
+			return "After sleeping the night in Geisel, you awaken "
+					+ "to find hostile exams, \nhomework assignments and essays after you. "
+						+ "\nFight your way to the top to get that A!!!!";
+		case 3: 
+			return "You find solace from this nightmare as you see\n "
+					+ "Audrey's Coffee Shop in sight.";
+		case 8: 
+			return "Defeat the boss!";
+		default: return "You ascend to the next floor...";
+		}
 	}
 	
 	
@@ -483,9 +487,9 @@ class Floor extends StackPane{
 	
 	
 	//Getters and Setters
-	public int getFloorNum() {
-		return floorNum;
-	}
+	//public int getFloorNum() {
+		//return floorNum;
+	//}
 	
 
 

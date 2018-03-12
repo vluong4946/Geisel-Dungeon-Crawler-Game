@@ -10,53 +10,91 @@ import javafx.scene.paint.Color;
 public class BattleScene{
 	static StackPane battlePane;
 	static Scene battle;
+	//Create four buttons for each action	
+	static Button attack = new Button("ATTACK");
+	static Button run = new Button("RUN");
+	static Button skill = new Button("SKILL");
+	static Button item = new Button("ITEM");
+	static Label pHealth = new Label("Health");
+	static Label pEnergy = new Label("Energy");
+	static Label eHealth = new Label("Health");
+
+	//Create rectangles that represent resource bars
+	//variables replaced with resources
+
+	static int PLAYER_HEALTH=10;
+	static int PLAYER_ENERGY=10;
+	static int ENEMY_HEALTH=10;
+
+	static Rectangle playerHealth;
+	static Rectangle playerEnergy;
+	static Rectangle enemyHealth;
+
+	//Adds color strip to bottom
+	static Rectangle strip = new Rectangle(GameGui.P_STAGE_SIZE,200);
+
+	//imports images for the enemies and players
+	static Image triton = new Image("Triton.png");
+	static ImageView tritonIV = new ImageView();
 	
 	public static Scene battleStart(){
 		
-		//Create four buttons for each action	
-		Button attack = new Button("ATTACK");
-		Button run = new Button("RUN");
-		Button skill = new Button("SKILL");
-		Button item = new Button("ITEM");
-		Label pHealth = new Label("Health");
-		Label pEnergy = new Label("Energy");
-		Label eHealth = new Label("Health");
-		
-		//Create rectangles that represent resource bars
-		//variables replaced with resources
-		
-		int PLAYER_HEALTH=10;
-		int PLAYER_ENERGY=10;
-		int ENEMY_HEALTH=10;
-		
-		Rectangle playerHealth = new Rectangle(PLAYER_HEALTH*10,20,Color.GREEN);
-		Rectangle playerEnergy = new Rectangle(PLAYER_ENERGY*10,20,Color.BLUE);
-		Rectangle enemyHealth = new Rectangle(ENEMY_HEALTH*10,20,Color.RED);
-		
-		//imports images for the enemies and players
-		Image triton = new Image("Triton.png");
-		ImageView tritonIV = new ImageView();
-		tritonIV.setImage(triton);
-		tritonIV.setFitWidth(200);
-		tritonIV.setPreserveRatio(true);
-		tritonIV.setSmooth(true);
-		tritonIV.setCache(true);
-		
-		
 		
 		//Assigns actions to the buttons
-		attack.setOnAction(e -> GameGui.window.setScene(GameGui.scene));
+		attack.setOnAction(e -> attack());
+		skill.setOnAction(e -> skill());
+		item.setOnAction(e -> item());
+		run.setOnAction(e -> run());
 		
 		
 		
 		//Creates the stack pane
 		battlePane = new StackPane();
 		
-		//Adds color strip to bottom
-		Rectangle strip = new Rectangle(GameGui.P_STAGE_SIZE,200);
+		updateBattle();
+		
+		battle = new Scene(battlePane,GameGui.P_STAGE_SIZE,GameGui.P_STAGE_SIZE);
+		
+		return battle;
+	}
+	
+	//methods for each action
+	public static void attack() {
+		GameGui.window.setScene(GameGui.scene);
+		updateBattle();
+	}
+	
+	public static void skill() {
+		
+		updateBattle();
+	}
+	
+	public static void item() {
+		PLAYER_HEALTH+=5;
+		updateBattle();
+	}
+	
+	public static void run() {
+		
+		updateBattle();
+	}
+	
+	
+	public static void updateBattle(){
+		battlePane.getChildren().clear();
+		//sizes the image for the player
+		tritonIV.setImage(triton);
+		tritonIV.setFitWidth(200);
+		tritonIV.setPreserveRatio(true);
+		tritonIV.setSmooth(true);
+		tritonIV.setCache(true);
+		
+		//Changes the size of resource bar after every action
+		playerHealth = new Rectangle(PLAYER_HEALTH*10,20,Color.GREEN);
+		playerEnergy = new Rectangle(PLAYER_ENERGY*10,20,Color.BLUE);
+		enemyHealth = new Rectangle(ENEMY_HEALTH*10,20,Color.RED);
 		
 		//Adds children to the pane and creates the scene
-		
 		battlePane.getChildren().addAll(strip,attack,run,skill,item,playerHealth,playerEnergy,enemyHealth,tritonIV,
 				pHealth,pEnergy,eHealth);
 		
@@ -92,35 +130,6 @@ public class BattleScene{
 		tritonIV.setTranslateY(40);
 		
 		strip.setTranslateY(300);
-		
-		battle = new Scene(battlePane,GameGui.P_STAGE_SIZE,GameGui.P_STAGE_SIZE);
-		
-		return battle;
-	}
-	
-	//methods for each action
-	public static void attack() {
-		
-		updateBattle();
-	}
-	
-	public static void skill() {
-		
-		updateBattle();
-	}
-	
-	public static void item() {
-		
-		updateBattle();
-	}
-	
-	public static void run() {
-		
-		updateBattle();
-	}
-	
-	
-	public static void updateBattle(){
 		
 	}
 }

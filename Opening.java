@@ -38,6 +38,7 @@ public class Opening extends Application {
 		/*
 		 * If you want to call the Opening java file, call this
 		 */
+		public static boolean accountCreated;
 	public void Opening(Stage primaryStage) throws Exception {
 		
 		//Application.launch(GameGui.class,args);
@@ -48,6 +49,7 @@ public class Opening extends Application {
 		Scene scene,scene1;
 		
 		account = new Account(); 
+		accountCreated = true;
 
 		primaryStage.centerOnScreen();
 		primaryStage.show();
@@ -415,10 +417,10 @@ public class Opening extends Application {
 			}
 	    });
 	}
-	public static void main(String [] args)
-	{
-		Application.launch(args);
-	}
+//	public static void main(String [] args)
+	//{
+		//Application.launch(args);
+	//}
 
 	
 }

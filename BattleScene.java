@@ -22,9 +22,14 @@ public class BattleScene{
 	//Create rectangles that represent resource bars
 	//variables replaced with resources
 
+	//these variables should equal values gotten from the player and monster class
 	static int PLAYER_HEALTH=10;
 	static int PLAYER_ENERGY=10;
 	static int ENEMY_HEALTH=10;
+	static int PLAYER_DEFENSE;
+	static int PLAYER_ATTACK;
+	static int ENEMY_DEFENSE;
+	static int ENEMY_ATTACK;
 
 	static Rectangle playerHealth;
 	static Rectangle playerEnergy;
@@ -60,7 +65,7 @@ public class BattleScene{
 	
 	//methods for each action
 	public static void attack() {
-		GameGui.window.setScene(GameGui.scene);
+	
 		updateBattle();
 	}
 	
@@ -130,6 +135,12 @@ public class BattleScene{
 		tritonIV.setTranslateY(40);
 		
 		strip.setTranslateY(300);
+		
+		if (ENEMY_HEALTH==0)
+			GameGui.window.setScene(GameGui.scene);
+		if (PLAYER_HEALTH==0)
+			//send to ending screen
+			GameGui.window.setScene(GameGui.scene); //this is temporary
 		
 	}
 }

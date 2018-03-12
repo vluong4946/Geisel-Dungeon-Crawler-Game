@@ -23,9 +23,6 @@ import javafx.scene.effect.*;
  * start New Game, Load a Game, See the Rank, Quit the Game
  * and I made event handler for each buttons which are in Account
  * ***************************************************************
- *  What I GONNA DO
- *  1. I think if there is any back ground or something else, it would be coool
- *  2. Comment all functions
  *  
  *  As you guys know, my English is not fluence as u
  *  so if the word is weird, change it and tell me

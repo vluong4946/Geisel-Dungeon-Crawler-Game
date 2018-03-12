@@ -24,6 +24,7 @@ I gonna edit to
 ****I know this code is really dirty!! I will organize it after finish****
 */
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -579,6 +580,16 @@ public class Account {
 		start.setTranslateX(370);
 		start.setTranslateY(300);
 		pane1.getChildren().add(start);
+		
+		start.setOnAction(event->{
+			try {
+				pane1.getChildren().clear();
+				Platform.exit();
+				} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
 	}
 
 	public String updateScore(int best) {
@@ -592,12 +603,15 @@ public class Account {
 	}
 
 	public void rankingScore(GridPane pane1) throws Exception {
+		
+		String[][] str = new String[10][2];
+		
 		readingInfo();
 		
 		Text Jointitle = new Text("TOP SCORE");
 		Jointitle.setFont(Font.font("Press Start K", FontWeight.BOLD, 60));
 		Jointitle.setFill(Color.BROWN);
-		Jointitle.setTranslateX(550);
+		Jointitle.setTranslateX(450);
 		Jointitle.setTranslateY(180);
 		
 	    DropShadow dropShadow = new DropShadow(); 
@@ -631,26 +645,54 @@ public class Account {
 			}
 		}
 		
-		for(int i = 1; i <=10; i++)
+		for(int i = 1 ; i < 10; i++) {
+			for(int j = 0; j < numofPpl; j++) {
+				if(rank[j] == i ) { // if it exists
+					if(!customers[j][0].equals(null)) {
+					str[i][0] = customers[j][0]; // username
+					str[i][1] = customers[j][3];  // bestScore
+					}
+				}
+			}
+		}
+//		if(numofPpl < 10)
+//		{
+//			for(int i = numofPpl+1 ; i < 10; i++)
+//			{
+//				str[i][0] = " ";
+//				str[i][1] = " ";
+//			}
+//		}
+		Text text = new Text("Username     Score");
+		text.setTranslateX(550);
+		text.setTranslateY(300);
+		text.setFill(Color.YELLOW);
+		text.setFont(Font.font("Press Start K", FontWeight.BOLD, 20));
+		pane1.getChildren().add(text);
+		
+		for(int i = 1; i < numofPpl+1; i++)
 		{
-			for(int j = 0; j < numofPpl;j++)
-			if(rank[j] == i)
-			{	
-				Text rank1 = new Text(customers[j][0]);
-				rank1.setTranslateX(600);
-				rank1.setTranslateY(300+j*45);
+				Text ranknum = new Text(Integer.toString(i));
+				ranknum.setTranslateX(450);
+				ranknum.setTranslateY(300 + i*45);
+				ranknum.setFill(Color.WHITE);
+				ranknum.setFont(Font.font("Press Start K", FontWeight.BOLD, 30));
+				pane1.getChildren().add(ranknum);
+				
+				Text rank1 = new Text(str[i][0]);
+				rank1.setTranslateX(550);
+				rank1.setTranslateY(300+i*45);
 				rank1.setFill(Color.WHITE);
 				rank1.setFont(Font.font("Press Start K", FontWeight.BOLD, 30));
 				pane1.getChildren().add(rank1);
 				
-				Text rank2 = new Text( "  >>  " + customers[j][3]);
-				rank2.setTranslateX(680);
-				rank2.setTranslateY(300+j*45);
+				Text rank2 = new Text("   >> " + str[i][1]);
+				rank2.setTranslateX(650);
+				rank2.setTranslateY(300+i*45);
 				rank2.setFill(Color.WHITE);
 				rank2.setFont(Font.font("Press Start K", FontWeight.BOLD, 30));
 				pane1.getChildren().add(rank2);
-				System.out.println(i + "   :" + customers[j][3]);				
-			}
+						
 		}
 	}
  		public void Ending(GridPane pane1) {

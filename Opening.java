@@ -67,7 +67,7 @@ public class Opening extends Application {
 	    label.setTranslateX(250);
 	    label.setTranslateY(180);
 	    
-		Label copyRight = new Label("©2018 THE SALTY SPITOON");
+		Label copyRight = new Label("2018 THE SALTY SPITOON");
 		copyRight.setFont(Font.font("Press Start K", FontWeight.BOLD, 20));
 		copyRight.setTranslateX(500);
 		copyRight.setTranslateY(250);
@@ -261,7 +261,7 @@ public class Opening extends Application {
 	    label.setTranslateX(250);
 	    label.setTranslateY(180);
 	    
-		Label copyRight = new Label("©2018 THE SALTY SPITOON");
+		Label copyRight = new Label("2018 THE SALTY SPITOON");
 		copyRight.setFont(Font.font("Press Start K", FontWeight.BOLD, 20));
 		copyRight.setTranslateX(500);
 		copyRight.setTranslateY(250);

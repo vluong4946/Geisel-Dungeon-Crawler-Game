@@ -4,6 +4,7 @@
 //**********************************
 // <Last change>
 //  3/12/2018 4:27am - I edited ending part; I put our name!
+//  3/12/2018 5:38am - I added line 593
 /*
 This java file does
 1. making new accounts -> MakingNewAccount(pane)
@@ -590,7 +591,7 @@ public class Account {
 		
 		start.setOnAction(event->{
 			try {
-				pane1.getChildren().clear();
+				pane1.getScene().getWindow().hide();
 				player.PlayerTest(major);
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block

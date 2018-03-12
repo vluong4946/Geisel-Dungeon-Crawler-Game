@@ -7,8 +7,6 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import java.util.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 public class GameTile extends StackPane{
 	//Fields
@@ -19,13 +17,16 @@ public class GameTile extends StackPane{
 	public static final int TILE_DIMENSIONS = 20;
 	private static final int NODE_CIRCLE_RADIUS = TILE_DIMENSIONS / 4;
 	
+	//Node identifiers
 	public static final int WALL = -1;
 	public static final int EMPTY = 0;
 	public static final int ENEMY = 1;
 	public static final int ITEM = 2;
 	public static final int PLAYER = 9;
+	public static final int EXIT = 99;
 	
 	private Random RNG = new Random();
+	
 	/*
 	 * Constructor: GameTile
 	 * Create a GameTile object with attributes color, type, and an array entry.
@@ -34,8 +35,11 @@ public class GameTile extends StackPane{
 	 * and status as a wall, empty, enemy, or item. 
 	 */
 	public GameTile(int floorNum, int row, int col){
-		if(row == GameGui.ROW_START && col == GameGui.COL_START) {
+		if(row == Floor.ROW_START && col == Floor.COL_START) {
 			tileValue = PLAYER;
+		}
+		else if(row == 6 && col == 6) {
+			tileValue = EXIT;
 		}
 		else if(createPerimeterWalls(row, col) == WALL) {
 			tileValue = WALL;
@@ -60,6 +64,7 @@ public class GameTile extends StackPane{
 		
 		
 		//Create shapes for respective nodes if applicable
+		
 		switch(tileValue) {
 		case WALL: this.getChildren().add(
 						new Rectangle(TILE_DIMENSIONS, TILE_DIMENSIONS, Color.LIGHTGRAY));
@@ -72,6 +77,8 @@ public class GameTile extends StackPane{
 		case ITEM: this.getChildren().add(
 						new Circle(NODE_CIRCLE_RADIUS, Color.PINK));
 					break;
+		case EXIT: this.getChildren().add(
+						new Rectangle(TILE_DIMENSIONS, TILE_DIMENSIONS, Color.BLACK));
 		}
 	}
 	

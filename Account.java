@@ -1,5 +1,9 @@
 //import java.util.*;
 //import java.util.*;
+
+//**********************************
+// <Last change>
+//  3/12/2018 4:27am - I edited ending part; I put our name!
 /*
 This java file does
 1. making new accounts -> MakingNewAccount(pane)
@@ -711,6 +715,46 @@ public class Account {
  		    dropShadow.setSpread(12);  
 
  		    endingtitle.setEffect(dropShadow);  
+ 		    
+ 	 	    pane1.getChildren().add(endingtitle);
+			
+				    Text made = new Text("Made by: ");
+ 		    Text makers1 = new Text("Victor Luong");
+ 		    Text makers2 = new Text("Ivan Cano");
+ 		    Text makers3 = new Text("Alex Wang");
+ 		    Text makers4 = new Text("Youngwoo Park");
+
+ 			made.setTranslateX(550);
+ 			made.setTranslateY(500);
+ 			made.setFill(Color.YELLOW);
+ 			made.setFont(Font.font("Press Start K", FontWeight.BOLD, 20));
+ 			pane1.getChildren().add(made);
+ 			
+ 			makers1.setTranslateX(800);
+ 			makers1.setTranslateY(500);
+ 			makers1.setFill(Color.WHITE);
+ 			makers1.setFont(Font.font("Press Start K", FontWeight.BOLD, 20));
+ 			pane1.getChildren().add(makers1);
+ 			
+ 			makers2.setTranslateX(800);
+ 			makers2.setTranslateY(550);
+ 			makers2.setFill(Color.WHITE);
+ 			makers2.setFont(Font.font("Press Start K", FontWeight.BOLD, 20));
+ 			pane1.getChildren().add(makers2);
+ 			
+ 			makers3.setTranslateX(800);
+ 			makers3.setTranslateY(600);
+ 			makers3.setFill(Color.WHITE);
+ 			makers3.setFont(Font.font("Press Start K", FontWeight.BOLD, 20));
+ 			pane1.getChildren().add(makers3);
+ 			
+ 			makers4.setTranslateX(800);
+ 			makers4.setTranslateY(650);
+ 			makers4.setFill(Color.WHITE);
+ 			makers4.setFont(Font.font("Press Start K", FontWeight.BOLD, 20));
+ 			pane1.getChildren().add(makers4);
+ 		    
+ 		    
  		    
  	 	    pane1.getChildren().add(endingtitle);
  		}

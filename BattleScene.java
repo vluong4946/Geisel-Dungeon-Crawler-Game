@@ -17,6 +17,7 @@ public class BattleScene{
 	static Label pHealth = new Label("Your Health");
 	static Label pEnergy = new Label("Energy");
 	static Label eHealth = new Label("Enemy Health");
+	static GameGui gui;
 
 	//Create rectangles that represent resource bars
 	//variables replaced with resources
@@ -146,6 +147,10 @@ public class BattleScene{
 	public static void enemyAttack(Player player, int ENEMY_ATTACK) {
 		player.health-=ENEMY_ATTACK;
 		PLAYER_HEALTH-=ENEMY_ATTACK;
+		if(PLAYER_HEALTH < 0)
+		{
+			gui.endingButton();
+		}
 	}
 	
 	public static void drinkCoffee(Player player) {

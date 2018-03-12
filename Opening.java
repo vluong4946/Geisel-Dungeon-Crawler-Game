@@ -23,6 +23,9 @@ import javafx.scene.effect.*;
  * start New Game, Load a Game, See the Rank, Quit the Game
  * and I made event handler for each buttons which are in Account
  * ***************************************************************
+ *  What I GONNA DO
+ *  1. I think if there is any back ground or something else, it would be coool
+ *  2. Comment all functions
  *  
  *  As you guys know, my English is not fluence as u
  *  so if the word is weird, change it and tell me
@@ -31,11 +34,13 @@ import javafx.scene.effect.*;
 public class Opening extends Application {
 
 		private static Account account; // yes account of course
-		
+		//static Stage primaryStage;
 		/*
 		 * If you want to call the Opening java file, call this
 		 */
-	public static void Opening(Stage primaryStage) throws Exception {
+	public void Opening(Stage primaryStage) throws Exception {
+		
+		//Application.launch(GameGui.class,args);
 		
 		GridPane pane = new GridPane(); // It is first page which contains title, and buttons
 		GridPane pane1 = new GridPane(); // It is Gridpane which gonna be called by 
@@ -230,7 +235,7 @@ public class Opening extends Application {
 	}
 	
 	// It is made for testing. Therefore, u can test from here
-	public void start(Stage primaryStage) throws Exception {
+	public void start(Stage primaryStage) {
 		GridPane pane = new GridPane();
 		GridPane pane1 = new GridPane();
 

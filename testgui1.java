@@ -38,7 +38,7 @@ public class testgui1 extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public static void main(String[]args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -160,7 +160,7 @@ public class testgui1 extends JFrame {
 		btnUseItem_4.setBounds(10, 147, 89, 23);
 		contentPane.add(btnUseItem_4);
 		
-		btnUseItem_6.addActionListener(new ActionListener() {
+		btnUseItem_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent action) {
 				
 				System.exit(0);
@@ -182,7 +182,7 @@ public class testgui1 extends JFrame {
 		btnUseItem_6.setBounds(10, 215, 89, 23);
 		contentPane.add(btnUseItem_6);
 		
-		btnUseItem_7.addActionListener(new ActionListener() {
+		btnUseItem_6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent action) {
 				
 				System.exit(0);

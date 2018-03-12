@@ -4,7 +4,6 @@
 //**********************************
 // <Last change>
 //  3/12/2018 4:27am - I edited ending part; I put our name!
-//  3/12/2018 5:38am - I added line 593
 /*
 This java file does
 1. making new accounts -> MakingNewAccount(pane)
@@ -30,7 +29,7 @@ I gonna edit to
 */
 
 
- */
+ 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
@@ -56,7 +55,7 @@ public class Account {
 
 	private static  File file = new File("Account.txt");
 
-	PlayerTest player = new PlayerTest();
+	Player player = new Player();
 	String playerName = "";
 	String pw = "";
 	String major = "";
@@ -592,7 +591,7 @@ public class Account {
 		start.setOnAction(event->{
 			try {
 				pane1.getScene().getWindow().hide();
-				player.PlayerTest(major);
+				player.Player(major);
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

@@ -42,7 +42,7 @@ public class GameGui extends Application{
 	//private GridPane humanGridPane;
 	
 	private Floor floor;
-	private int floorNum = 1;
+	private int floorNum = Floor.FIRST_FLOOR;
 	
 	//Pictures
 	public static final String PLAYER_PICTURE = "Player.png";

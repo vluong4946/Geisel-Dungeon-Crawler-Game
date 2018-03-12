@@ -47,6 +47,8 @@ public class BattleScene{
 	//imports images for the enemies and players
 	static Image triton = new Image("Triton.jpg");
 	static ImageView tritonIV = new ImageView();
+	static Image homework = new Image("Homework.jpg");
+	static ImageView homeworkIV = new ImageView();
 	
 	public static Scene battleStart(Player player, Minion enemy){ //Pass in enemy also
 		PLAYER_HEALTH= player.health;
@@ -160,7 +162,10 @@ public class BattleScene{
 			player.energy += COFFEE_HEAL_AMOUNT * 2;
 			PLAYER_ENERGY += COFFEE_HEAL_AMOUNT * 2;
 			player.coffeeAmount -= 1;
+			updateBattle();
 		}
+		else
+			System.out.println("You do not have any coffee!");
 		
 	}
 	
@@ -173,13 +178,19 @@ public class BattleScene{
 		tritonIV.setSmooth(true);
 		tritonIV.setCache(true);
 		
+		homeworkIV.setImage(homework);
+		homeworkIV.setFitWidth(200);
+		homeworkIV.setPreserveRatio(true);
+		homeworkIV.setSmooth(true);
+		homeworkIV.setCache(true);
+		
 		//Changes the size of resource bar after every action
 		playerHealth = new Rectangle(PLAYER_HEALTH,20,Color.GREEN);
 		playerEnergy = new Rectangle(PLAYER_ENERGY,20,Color.BLUE);
 		enemyHealth = new Rectangle(ENEMY_HEALTH,20,Color.RED);
 		
 		//Adds children to the pane and creates the scene
-		battlePane.getChildren().addAll(strip,attack,run,skill,item,playerHealth,playerEnergy,enemyHealth,tritonIV,
+		battlePane.getChildren().addAll(strip,attack,run,skill,item,playerHealth,playerEnergy,enemyHealth,tritonIV,homeworkIV,
 				pHealth,pEnergy,eHealth);
 		
 		attack.setTranslateX(-250);
@@ -212,6 +223,9 @@ public class BattleScene{
 		
 		tritonIV.setTranslateX(-200);
 		tritonIV.setTranslateY(40);
+		
+		homeworkIV.setTranslateX(100);
+		homeworkIV.setTranslateY(-200);
 		
 		strip.setTranslateY(300);
 		

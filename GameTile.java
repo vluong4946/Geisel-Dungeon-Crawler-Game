@@ -51,6 +51,9 @@ public class GameTile extends StackPane{
 		else if(IsCreatePerimeterWalls(row, col)) {
 			tileValue = WALL;
 		}
+		else if(IsCreateWalls(row,col)) {
+			tileValue = WALL;
+		}
 		else {
 			//Use RNG to assign a tile to be an enemy. The chance is based on floorNum.
 			switch(RNG.nextInt(getEnemyFrequency(floorNum))) {
@@ -81,8 +84,7 @@ public class GameTile extends StackPane{
 					break;
 		case EMPTY: 
 					break;
-		case ENEMY: this.getChildren().add(
-						new Circle(NODE_CIRCLE_RADIUS, Color.RED)); 
+		case ENEMY:
 					break;
 		case ITEM: this.getChildren().add(
 						new Circle(NODE_CIRCLE_RADIUS, Color.PINK));
@@ -117,6 +119,14 @@ public class GameTile extends StackPane{
 			return false;
 	}
 	
+	private static boolean IsCreateWalls(int row, int col) {
+		if (row==5||row==6||row==14||row==15||row==25||row==26||col==5||col==6||col==14||col==15||col==25||col==26)
+			return false;
+		else if (row==10||row==20||col==10||col==20)
+			return true;
+		else
+			return false;
+	}
 	
 	/*
 	 * Method: getEnemyFrequency
@@ -183,3 +193,4 @@ public class GameTile extends StackPane{
 	
 
 }
+

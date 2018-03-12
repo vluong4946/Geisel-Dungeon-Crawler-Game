@@ -23,12 +23,11 @@ public class BattleScene{
 	//variables replaced with resources
 
 	//these variables should equal values gotten from the player and monster class
-	static int PLAYER_HEALTH=10;
-	static int PLAYER_ENERGY=10;
-	static int ENEMY_HEALTH=10;
-	static int PLAYER_DEFENSE;
+	static int PLAYER_HEALTH=100;
+	static int PLAYER_ENERGY=100;
+	static int ENEMY_HEALTH=100;
+
 	static int PLAYER_ATTACK;
-	static int ENEMY_DEFENSE;
 	static int ENEMY_ATTACK;
 
 	static Rectangle playerHealth;
@@ -42,7 +41,7 @@ public class BattleScene{
 	static Image triton = new Image("Triton.png");
 	static ImageView tritonIV = new ImageView();
 	
-	public static Scene battleStart(){
+	public static Scene battleStart(/*pass in a value that identifies enemy*/){
 		
 		
 		//Assigns actions to the buttons
@@ -65,23 +64,44 @@ public class BattleScene{
 	
 	//methods for each action
 	public static void attack() {
-	
+		System.out.println("You attack the enemy!");
+		ENEMY_HEALTH-=PLAYER_ATTACK;
+		System.out.println("The enemy attacks you!");
+		enemyAttack();
 		updateBattle();
 	}
 	
 	public static void skill() {
-		
-		updateBattle();
+		if(PLAYER_ENERGY>=10) {
+			System.out.println("You spend 10 energy and use a super attack!");
+			ENEMY_HEALTH-=PLAYER_ATTACK*2;
+			PLAYER_ENERGY-=10;
+			System.out.println("The enemy attacks you!");
+			enemyAttack();
+			updateBattle();}
+		else
+			System.out.println("You do not have enough energy!");
+			updateBattle();
 	}
 	
-	public static void item() {
-		PLAYER_HEALTH+=5;
+	public static void item(/*opens bag with items*/) {
+		
+		
 		updateBattle();
 	}
 	
 	public static void run() {
-		
-		updateBattle();
+		if (PLAYER_ENERGY>=50) {
+			System.out.println("You try to get away!");
+			PLAYER_ENERGY-=50;
+			updateBattle();}
+		else 
+			System.out.println("You do not have enough energy!");
+			updateBattle();
+	}
+	
+	public static void enemyAttack() {
+		PLAYER_HEALTH-=ENEMY_ATTACK;
 	}
 	
 	
@@ -95,9 +115,9 @@ public class BattleScene{
 		tritonIV.setCache(true);
 		
 		//Changes the size of resource bar after every action
-		playerHealth = new Rectangle(PLAYER_HEALTH*10,20,Color.GREEN);
-		playerEnergy = new Rectangle(PLAYER_ENERGY*10,20,Color.BLUE);
-		enemyHealth = new Rectangle(ENEMY_HEALTH*10,20,Color.RED);
+		playerHealth = new Rectangle(PLAYER_HEALTH,20,Color.GREEN);
+		playerEnergy = new Rectangle(PLAYER_ENERGY,20,Color.BLUE);
+		enemyHealth = new Rectangle(ENEMY_HEALTH,20,Color.RED);
 		
 		//Adds children to the pane and creates the scene
 		battlePane.getChildren().addAll(strip,attack,run,skill,item,playerHealth,playerEnergy,enemyHealth,tritonIV,

@@ -23,9 +23,19 @@ public class GameTile extends StackPane{
 	public static final int ENEMY = 1;
 	public static final int ITEM = 2;
 	public static final int PLAYER = 9;
-	public static final int EXIT = 99;
+	public static final int EXIT = 4;
 	
-	private Random RNG = new Random();
+	private static final int NUMBER_OF_POSSIBLE_EXITS = 3;
+	private static int[] exitLocation;
+	//Exit locations are the bottom left, right, and upper right corners.
+	private static final int[] EXIT_LOC_1 = 
+		{GameGui.NUM_TILES_PER_SIDE - 4, GameGui.NUM_TILES_PER_SIDE - 4};
+	private static final int[] EXIT_LOC_2 =
+		{GameGui.NUM_TILES_PER_SIDE - 4, GameGui.NUM_TILES_PER_SIDE - 26};
+	private static final int[] EXIT_LOC_3 = 
+		{GameGui.NUM_TILES_PER_SIDE - 26, GameGui.NUM_TILES_PER_SIDE - 4};
+	
+	private static Random RNG = new Random();
 	
 	/*
 	 * Constructor: GameTile
@@ -35,13 +45,11 @@ public class GameTile extends StackPane{
 	 * and status as a wall, empty, enemy, or item. 
 	 */
 	public GameTile(int floorNum, int row, int col){
+		
 		if(row == Floor.ROW_START && col == Floor.COL_START) {
 			tileValue = PLAYER;
 		}
-		else if(row == 6 && col == 6) {
-			tileValue = EXIT;
-		}
-		else if(createPerimeterWalls(row, col) == WALL) {
+		else if(IsCreatePerimeterWalls(row, col)) {
 			tileValue = WALL;
 		}
 		else {
@@ -58,10 +66,13 @@ public class GameTile extends StackPane{
 				default: tileValue = EMPTY; break;
 				}
 		}
+		
+		//Set exit location lastly, so it doesn't get overrided. 
+		if(exitLocation[0] == row && exitLocation[1] == col)
+			tileValue = EXIT;
 			
 		//Record (row, col) position and status
 		tileStatus[row][col] = tileValue;
-		
 		
 		//Create shapes for respective nodes if applicable
 		
@@ -93,18 +104,18 @@ public class GameTile extends StackPane{
 	}
 	
 	/*
-	 * Method: createPerimeterWalls
+	 * Method: IsCreatePerimeterWalls
 	 * Is used to assign tiles on the perimeter of the playing field to be walls.
 	 */
-	private static int createPerimeterWalls(int row, int col) {
+	private static boolean IsCreatePerimeterWalls(int row, int col) {
 		//Horizontal Walls
 		if(row == 0 || row == GameGui.NUM_TILES_PER_SIDE - 1)
-			return WALL;
+			return true;
 		//Vertical Wall
 		else if(col == 0 || col == GameGui.NUM_TILES_PER_SIDE - 1)
-			return WALL;
+			return true;
 		else
-			return EMPTY;
+			return false;
 	}
 	
 	/*
@@ -146,6 +157,21 @@ public class GameTile extends StackPane{
 		case 7: return 90;
 		case 8: return 100; //No chance of item spawns on floor 8. 
 		default: return -1; //Unreachable code.
+		}
+	}
+	/*
+	 * Method: getExitLocation
+	 * Returns a random exit location from a set pool of locations 
+	 * each time a new floor is generated. 
+	 */
+	public static void setExitLocation() {
+		switch(RNG.nextInt(NUMBER_OF_POSSIBLE_EXITS)) {
+		case 0: 
+			exitLocation = EXIT_LOC_1; break; 
+		case 1:
+			exitLocation = EXIT_LOC_2; break; 
+		case 2:
+			exitLocation = EXIT_LOC_3; break; 
 		}
 	}
 	

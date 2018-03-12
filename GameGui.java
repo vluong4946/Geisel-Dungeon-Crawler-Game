@@ -15,11 +15,11 @@ public class GameGui extends Application{
 		Application.launch(args); //runs the start method
 	}
 	
-	//Fields
+	//GUI Fields
 	private static final int SPACE_BETWEEN_HBOX_NODES = 50;
 	private static final int INSETS_SPACING_FOR_HBOX = 20;
 	private static final String P_STAGE_TITLE = "Geisel Dungeon Crawler";
-	static final int P_STAGE_SIZE = 800;
+	public static final int P_STAGE_SIZE = 800;
 	public static final int GRID_PANE_SIZE = 600; 
 	
 	public static final int NUM_TILES_PER_SIDE = 
@@ -34,6 +34,8 @@ public class GameGui extends Application{
 	private Text floorNumText;
 	private Node human;
 	private Node flashlight;
+	private static final int FL_RADIUS = 70;
+	private static final int FL_OFFSET = 990;
 	
 	public static Stage window;
 	public static Scene scene;
@@ -42,8 +44,8 @@ public class GameGui extends Application{
 	private Floor floor;
 	private int floorNum = 1;
 	
-	public static final int ROW_START = 4;
-	public static final int COL_START = 4;
+	//Pictures
+	public static final String PLAYER_PICTURE = "Player.png";
 	
 	//Methods
 	public void start(Stage primaryStage) {
@@ -84,7 +86,8 @@ public class GameGui extends Application{
 		tilesGridPane = new GridPane();
 		tilesGridPane.setPrefSize(GRID_PANE_SIZE, GRID_PANE_SIZE);
 		tilesGridPane.setAlignment(Pos.CENTER);
-		//Stores a total of 900 tiles in tilesGridPane (30 x 30)
+		//Stores a total of 900 tiles in tilesGridPane (30 x 30).
+		//Stores each tile created in an array to be referenced later on. 
 		for(int row = 0; row < NUM_TILES_PER_SIDE; row++) {
 			for(int col = 0; col < NUM_TILES_PER_SIDE; col++) {
 				GameTile tile = GameTile.createGameTile(floorNum, row, col);
@@ -93,17 +96,18 @@ public class GameGui extends Application{
 			}
 		}
 		
+		//Create human object and flashlight to follow human
 		human = createHuman();
 		flashlight = createFlashlight();
-		tilesGridPane.add(human, COL_START, ROW_START);
+		tilesGridPane.add(human, Floor.COL_START, Floor.ROW_START);
 
 		
 		//Create StackPane to store flashlight and tilesGridPane
 		stackPane = new StackPane();
 		stackPane.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
 		stackPane.getChildren().addAll(tilesGridPane,flashlight);
-		stackPane.setTranslateX(-800);
-		stackPane.setTranslateY(-800);
+		stackPane.setTranslateX(-P_STAGE_SIZE); /**why negatives?**/
+		stackPane.setTranslateY(-P_STAGE_SIZE);
 		
 		//Create borderPane and scene
 		borderPane = new BorderPane();
@@ -126,7 +130,7 @@ public class GameGui extends Application{
 	 * Creates a Node human to navigate the playing field. 
 	 */
 	public Node createHuman() {
-		Image player = new Image("Player.png");
+		Image player = new Image(PLAYER_PICTURE);
 		ImageView playerIV = new ImageView();
 		playerIV.setImage(player);
 		playerIV.setFitWidth(GameTile.TILE_DIMENSIONS);
@@ -135,14 +139,23 @@ public class GameGui extends Application{
 		playerIV.setCache(true);
 		return playerIV;
 	}
+	/*
+	 * Create FlashLight
+	 * Creates a Node flashlight to follow human around playing field. 
+	 */
 	private Node createFlashlight() {
 		Rectangle dark = new Rectangle(3*P_STAGE_SIZE,3*P_STAGE_SIZE,Color.GRAY);
-		Circle light = new Circle(990, 990, 70);
+		Circle light = new Circle(FL_OFFSET, FL_OFFSET, FL_RADIUS);
 		Shape flashlight = Shape.subtract(dark, light);
 		return flashlight;
 	}
 
-	
+	/*
+	 * Method: allowUserInput
+	 * This method is called after creation of the GUI. 
+	 * This method prompts user input through the arrow keys, allowing
+	 * the player to control movement of the human. 
+	 */
 	public void allowUserInput(Scene scene, Node human, int floorNum) {
 		//Create floor object
 		floor = new Floor(floorNum);
@@ -150,7 +163,6 @@ public class GameGui extends Application{
 		//Accept user input
 		scene.setOnKeyPressed(key -> {
 			switch(key.getCode()) {
-			//Probably break these up into methods. 
 			case UP: 
 				switch(floor.getAbove()) {
 				case GameTile.WALL: promptEncounters(floor.getAbove()); break;
@@ -209,7 +221,8 @@ public class GameGui extends Application{
 		case GameTile.ENEMY: System.out.println("e");
 		window.setScene(BattleScene.battleStart()); break; //fill in
 		case GameTile.ITEM: System.out.println("i"); break; //fill in
-//		case GameTile.EXIT: System.out.println("exit"); break; //fill in
+		case GameTile.EXIT: System.out.println("exit"); break; //fill in
+		
 		}
 	}
 	
@@ -222,6 +235,14 @@ public class GameGui extends Application{
 		tilesGridPane.getChildren()
 			.remove(tiles[floor.playerPosition[0]][floor.playerPosition[1]]);
 	}
+	/*
+	 * Method: setIsFloorComplete
+	 * Setter method to set boolean isFloorComplete. Called with parameter
+	 * true when player reaches a floor exit. 
+	 */
+	public void setIsfloorComplete(boolean isAtExit) {
+		floor.isFloorComplete = isAtExit;
+	}
 
 
 }
@@ -230,13 +251,16 @@ class Floor extends StackPane{
 	
 	//Fields 
 	public int floorNum;
+	public boolean isFloorComplete;
 	public static final int FIRST_FLOOR = 1;
 	public static final int LAST_FLOOR = 8;
 	
 	public int[][] floorArray;
 	private static int[][] wallsArray;
+	public static final int ROW_START = 4;
+	public static final int COL_START = 4;
 	
-	public int[] playerPosition = {GameGui.ROW_START, GameGui.COL_START};
+	public int[] playerPosition = {ROW_START, COL_START};
 	
 	private static final int FLOOR_ARRAY_SIZE = GameGui.NUM_TILES_PER_SIDE;
 
@@ -251,7 +275,7 @@ class Floor extends StackPane{
 		this.floorArray = 
 				new int[GameGui.NUM_TILES_PER_SIDE][GameGui.NUM_TILES_PER_SIDE];
 		this.floorArray = copyArray(floorArray, GameTile.tileStatus);
-		
+		this.isFloorComplete = false;
 		
 		
 		//Prints floorArray. Used for testing. Will be removed. 
@@ -304,7 +328,7 @@ class Floor extends StackPane{
 		case GameTile.ENEMY: return GameTile.ENEMY;
 		case GameTile.ITEM: return GameTile.ITEM;
 		case GameTile.EMPTY: return GameTile.EMPTY;
-//		case GameTile.EXIT: return GameTile.EXIT;
+		case GameTile.EXIT: return GameTile.EXIT;
 		default: return -1; //Unreachable code
 		}
 	}
@@ -314,7 +338,7 @@ class Floor extends StackPane{
 		case GameTile.ENEMY: return GameTile.ENEMY;
 		case GameTile.ITEM: return GameTile.ITEM;
 		case GameTile.EMPTY: return GameTile.EMPTY;
-//		case GameTile.EXIT: return GameTile.EXIT;
+		case GameTile.EXIT: return GameTile.EXIT;
 		default: return -1; //Unreachable code
 		}
 	}
@@ -324,7 +348,7 @@ class Floor extends StackPane{
 		case GameTile.ENEMY: return GameTile.ENEMY;
 		case GameTile.ITEM: return GameTile.ITEM;
 		case GameTile.EMPTY: return GameTile.EMPTY;
-//		case GameTile.EXIT: return GameTile.EXIT;
+		case GameTile.EXIT: return GameTile.EXIT;
 		default: return -1; //Unreachable code
 		}
 	}
@@ -334,7 +358,7 @@ class Floor extends StackPane{
 		case GameTile.ENEMY: return GameTile.ENEMY;
 		case GameTile.ITEM: return GameTile.ITEM;
 		case GameTile.EMPTY: return GameTile.EMPTY;
-//		case GameTile.EXIT: return GameTile.EXIT;
+		case GameTile.EXIT: return GameTile.EXIT;
 		default: return -1; //Unreachable code
 		}
 	}

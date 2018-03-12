@@ -34,7 +34,7 @@ public class GameGui extends Application{
 	private Text floorNumText;
 	private Node human;
 	private Node flashlight;
-	private static final int FL_RADIUS = 70;
+	private static final int FL_RADIUS = 200;
 	private static final int FL_OFFSET = 990;
 	
 	public static Stage window;
@@ -42,21 +42,21 @@ public class GameGui extends Application{
 	//private GridPane humanGridPane;
 	
 	private Floor floor;
-	private int floorNum = Floor.FIRST_FLOOR;
 	
 	//Pictures
-	public static final String PLAYER_PICTURE = "Player.png";
+	private static final String PLAYER_PICTURE = "Player.png";
 	
 	//Methods
 	public void start(Stage primaryStage) {
-		window = primaryStage;
-		createGui(window); //1 is temporary for testing
-		
+		//do {
+			window = primaryStage;
+			createGui(window);
+			
+		//} while(floor.isFloorComplete);
 		
 		/** BELOW IS FUTURE GAME LOOP TO GO THROUGH THE FLOORS **/
 		//for(int floorNum = Floor.FIRST_FLOOR; floorNum <= Floor.LAST_FLOOR; floorNum++) {
-			//Floor floor = new Floor(floorNum);
-			//createGui(primaryStage, floor.getFloorNum()); 
+			//createGui(primaryStage); 
 		//}
 		
 	}
@@ -67,6 +67,7 @@ public class GameGui extends Application{
 	 */
 	private void createGui(Stage primaryStage) {
 		//Set primaryStage attributes
+		System.out.println(Floor.floorNum);
 		primaryStage.setTitle(P_STAGE_TITLE);
 		primaryStage.setMaxWidth(P_STAGE_SIZE);
 		primaryStage.setMaxHeight(P_STAGE_SIZE);
@@ -78,7 +79,7 @@ public class GameGui extends Application{
 		topHBox.setStyle("-fx-background-color: lavender");
 		
 		//Create floor# text and put it in topHBox
-		floorNumText = new Text("Floor: " + floorNum);
+		floorNumText = new Text("Floor: " + Floor.floorNum);
 		topHBox.getChildren().add(floorNumText);
 		topHBox.setAlignment(Pos.TOP_LEFT);
 		
@@ -86,15 +87,11 @@ public class GameGui extends Application{
 		tilesGridPane = new GridPane();
 		tilesGridPane.setPrefSize(GRID_PANE_SIZE, GRID_PANE_SIZE);
 		tilesGridPane.setAlignment(Pos.CENTER);
-		//Stores a total of 900 tiles in tilesGridPane (30 x 30).
-		//Stores each tile created in an array to be referenced later on. 
-		for(int row = 0; row < NUM_TILES_PER_SIDE; row++) {
-			for(int col = 0; col < NUM_TILES_PER_SIDE; col++) {
-				GameTile tile = GameTile.createGameTile(floorNum, row, col);
-				tilesGridPane.add(tile, col, row);
-				tiles[row][col] = tile;
-			}
-		}
+		
+		//Store gametiles and make a new Floor object. 
+		GameTile.setExitLocation();
+		createGameArray(Floor.floorNum, tilesGridPane);
+		floor = new Floor(Floor.floorNum);
 		
 		//Create human object and flashlight to follow human
 		human = createHuman();
@@ -121,8 +118,22 @@ public class GameGui extends Application{
 		primaryStage.show();
 		
 		//From now on, player controls the human node. 
-		allowUserInput(scene, human, floorNum);
+		allowUserInput(scene, human, Floor.floorNum);
 		
+	}
+	/*
+	 * Method: createGameArray
+	 * Stores a total of 900 tiles in tilesGridPane (30 x 30).
+	 * Stores each tile created in an array to be referenced later on. 
+	 */
+	public void createGameArray(int floorNum, GridPane tilesGridPane) {
+		for(int row = 0; row < NUM_TILES_PER_SIDE; row++) {
+			for(int col = 0; col < NUM_TILES_PER_SIDE; col++) {
+				GameTile tile = GameTile.createGameTile(floorNum, row, col);
+				tilesGridPane.add(tile, col, row);
+				tiles[row][col] = tile;
+			}
+		}
 	}
 	
 	/*
@@ -144,7 +155,7 @@ public class GameGui extends Application{
 	 * Creates a Node flashlight to follow human around playing field. 
 	 */
 	private Node createFlashlight() {
-		Rectangle dark = new Rectangle(3*P_STAGE_SIZE,3*P_STAGE_SIZE,Color.GRAY);
+		Rectangle dark = new Rectangle(3*P_STAGE_SIZE,3*P_STAGE_SIZE,Color.BLACK);
 		Circle light = new Circle(FL_OFFSET, FL_OFFSET, FL_RADIUS);
 		Shape flashlight = Shape.subtract(dark, light);
 		return flashlight;
@@ -157,71 +168,92 @@ public class GameGui extends Application{
 	 * the player to control movement of the human. 
 	 */
 	public void allowUserInput(Scene scene, Node human, int floorNum) {
-		//Create floor object
-		floor = new Floor(floorNum);
+		//Create floor object, which contains the array for the nodes on the screen.
+		//floor = new Floor(floorNum);
 				
 		//Accept user input
 		scene.setOnKeyPressed(key -> {
 			switch(key.getCode()) {
 			case UP: 
 				switch(floor.getAbove()) {
-				case GameTile.WALL: promptEncounters(floor.getAbove()); break;
+				case GameTile.WALL: 
+					promptEncounters(floor.getAbove()); break;
 				default:
 					RemovePreviousTile();
 					promptEncounters(floor.getAbove());
 					floor.moveUp();
-					
-					//Visually update position
+					Floor.testPrintArray(floor.floorArray);
 					human.setTranslateY(human.getTranslateY() - GameTile.TILE_DIMENSIONS);
 					flashlight.setTranslateY(flashlight.getTranslateY() - GameTile.TILE_DIMENSIONS);
+					checkIfFloorComplete();
 				}
 				break;
 			case LEFT:
 				switch(floor.getLeft()) {
-				case GameTile.WALL: promptEncounters(floor.getLeft()); break;
+				case GameTile.WALL: 
+					promptEncounters(floor.getLeft()); break;
 				default:
 					RemovePreviousTile();
 					promptEncounters(floor.getLeft());
 					floor.moveLeft();
+					Floor.testPrintArray(floor.floorArray);
 					human.setTranslateX(human.getTranslateX() - GameTile.TILE_DIMENSIONS);
 					flashlight.setTranslateX(flashlight.getTranslateX() - GameTile.TILE_DIMENSIONS);
+					checkIfFloorComplete();
 				}
 				break;
 			case DOWN:
 				switch(floor.getBelow()) {
-				case GameTile.WALL: promptEncounters(floor.getBelow()); break;
+				case GameTile.WALL: 
+					promptEncounters(floor.getBelow()); break;
 				default:
 					RemovePreviousTile();
 					promptEncounters(floor.getBelow());
 					floor.moveDown();
+					Floor.testPrintArray(floor.floorArray);
 					human.setTranslateY(human.getTranslateY() + GameTile.TILE_DIMENSIONS);
 					flashlight.setTranslateY(flashlight.getTranslateY() + GameTile.TILE_DIMENSIONS);
+					checkIfFloorComplete();
 				}
 				break;
 			case RIGHT:
 				switch(floor.getRight()) {
-				case GameTile.WALL: promptEncounters(floor.getRight()); break;
+				case GameTile.WALL: 
+					promptEncounters(floor.getRight()); break;
 				default:
 					RemovePreviousTile();
-					promptEncounters(floor.getRight());
+					promptEncounters(floor.getRight()); 
 					floor.moveRight();
+					Floor.testPrintArray(floor.floorArray);
 					human.setTranslateX(human.getTranslateX() + GameTile.TILE_DIMENSIONS);
 					flashlight.setTranslateX(flashlight.getTranslateX() + GameTile.TILE_DIMENSIONS);
+					checkIfFloorComplete();
 				}
 				break;
 			default:
 				break;
 			}
-		});		
+		});	
 	}
 	
 	public void promptEncounters(int nodeEncountered) {
 		switch(nodeEncountered) {
-		case GameTile.WALL: System.out.println("You encounter a wall."); break; 
-		case GameTile.ENEMY: System.out.println("e");
-		window.setScene(BattleScene.battleStart()); break; //fill in
-		case GameTile.ITEM: System.out.println("i"); break; //fill in
-		case GameTile.EXIT: System.out.println("exit"); break; //fill in
+		case GameTile.WALL: 
+			System.out.println("You encounter a wall."); 
+			break; 
+		case GameTile.ENEMY: 
+			System.out.println("e");
+			window.setScene(BattleScene.battleStart()); 
+			break; //fill in
+		case GameTile.ITEM: 
+			System.out.println("i"); 
+			break; //fill in
+		case GameTile.EXIT: 
+			System.out.println("exit");
+			//setIsFloorComplete(true);
+			Floor.floorNum++;
+			floor.isFloorComplete = true;
+			break; //fill in
 		
 		}
 	}
@@ -240,8 +272,19 @@ public class GameGui extends Application{
 	 * Setter method to set boolean isFloorComplete. Called with parameter
 	 * true when player reaches a floor exit. 
 	 */
-	public void setIsfloorComplete(boolean isAtExit) {
-		floor.isFloorComplete = isAtExit;
+	//public void setIsFloorComplete(boolean isAtExit) {
+	//	floor.isFloorComplete = isAtExit;
+	//}
+	
+	/*
+	 * Method: checkIfFloorComplete
+	 * This method will generate a new floor if players reach the exit of a floor.
+	 */
+	public void checkIfFloorComplete() {
+		if(floor.isFloorComplete) {
+			floor.isFloorComplete = false;
+			start(window);
+		}
 	}
 
 
@@ -250,37 +293,35 @@ public class GameGui extends Application{
 class Floor extends StackPane{
 	
 	//Fields 
-	public int floorNum;
 	public boolean isFloorComplete;
 	public static final int FIRST_FLOOR = 1;
 	public static final int LAST_FLOOR = 8;
+	public static int floorNum = 1;
 	
-	public int[][] floorArray;
-	private static int[][] wallsArray;
+	public int[][] floorArray
+		= new int[GameGui.NUM_TILES_PER_SIDE][GameGui.NUM_TILES_PER_SIDE];
+	//private static int[][] wallsArray;
 	public static final int ROW_START = 4;
 	public static final int COL_START = 4;
 	
-	public int[] playerPosition = {ROW_START, COL_START};
+	public int[] playerPosition = new int[2];
 	
-	private static final int FLOOR_ARRAY_SIZE = GameGui.NUM_TILES_PER_SIDE;
+	//private static final int FLOOR_ARRAY_SIZE = GameGui.NUM_TILES_PER_SIDE;
 
 	/*
 	 * The constructor for Floor stores the floorNum and the layout of
 	 * each floor
 	 */
-	public Floor(int floorNum) {
-		this.floorNum = floorNum;
-		
-		//Creating array for floor and transferring the tiles information to it. 
-		this.floorArray = 
-				new int[GameGui.NUM_TILES_PER_SIDE][GameGui.NUM_TILES_PER_SIDE];
+	public Floor(int nextFloor) {
+		floorNum = nextFloor;
+		//transferring the tiles information to floorArray. 
 		this.floorArray = copyArray(floorArray, GameTile.tileStatus);
 		this.isFloorComplete = false;
 		
-		
 		//Prints floorArray. Used for testing. Will be removed. 
 		testPrintArray(floorArray);
-		
+		playerPosition[0] = ROW_START;
+		playerPosition[1] = COL_START;
 	}
 	/*
 	 * Method: promptEncounters
@@ -396,15 +437,7 @@ class Floor extends StackPane{
 		}
 		return a1;
 	}
-	/*
-	 * Method: printLine
-	 * Used for testing. Prints a line of - 's
-	 */
-	public static void printLine() {
-		for(int i = 0; i < 10; i++)
-			System.out.print("-");
-		System.out.println();
-	}
+
 	
 	/*
 	 * Method: testPrintArray
@@ -417,7 +450,9 @@ class Floor extends StackPane{
 			}
 			System.out.println();
 		}
-		printLine();
+		for(int i = 0; i < 20; i++)
+			System.out.print("-");
+		System.out.println();
 	}
 	
 	

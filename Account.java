@@ -24,6 +24,8 @@ I gonna edit to
 ****I know this code is really dirty!! I will organize it after finish****
 */
 
+
+ */
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
@@ -49,9 +51,10 @@ public class Account {
 
 	private static  File file = new File("Account.txt");
 
+	PlayerTest player = new PlayerTest();
 	String playerName = "";
 	String pw = "";
-	String major;
+	String major = "";
 	String bestScore = "0";
 	int bestNum = 0;
 	static int option;
@@ -210,7 +213,7 @@ public class Account {
 		MenuItem major2 = new MenuItem("Mathmatics");
 		MenuItem major3 = new MenuItem("Art");
 		MenuItem major4 = new MenuItem("History");
-		MenuItem major5 = new MenuItem("Well..");
+		MenuItem major5 = new MenuItem("Psychology");
 		
 		MenuButton menuButton = new MenuButton("Major   ", null, major1, major2, major3, major4, major5);
 		HBox hbox = new HBox(menuButton);
@@ -584,8 +587,8 @@ public class Account {
 		start.setOnAction(event->{
 			try {
 				pane1.getChildren().clear();
-				Platform.exit();
-				} catch (Exception e1) {
+				player.PlayerTest(major);
+			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
@@ -655,14 +658,6 @@ public class Account {
 				}
 			}
 		}
-//		if(numofPpl < 10)
-//		{
-//			for(int i = numofPpl+1 ; i < 10; i++)
-//			{
-//				str[i][0] = " ";
-//				str[i][1] = " ";
-//			}
-//		}
 		Text text = new Text("Username     Score");
 		text.setTranslateX(550);
 		text.setTranslateY(300);

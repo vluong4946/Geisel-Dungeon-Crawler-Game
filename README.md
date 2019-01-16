@@ -16,4 +16,7 @@ Game utilizes:
 * File I/O
 * Inheritance and Polymorphism
 
-A video demo and more info can be found at [our website](https://60alex60.wixsite.com/geiseldungeon/video-demo). 
+Video Demo:
+https://www.youtube.com/watch?v=Lm31WlWuh2w
+
+More information can be found at [our website](https://60alex60.wixsite.com/geiseldungeon). 
